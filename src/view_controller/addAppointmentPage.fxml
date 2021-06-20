@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.addAppointmentPageController">
+   <children>
+      <VBox layoutX="42.0" layoutY="37.0" prefHeight="350.0" prefWidth="230.0">
+         <children>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Appointment ID: " />
+                  <TextField fx:id="appointmentIDTextBox" disable="true" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Title:" />
+                  <TextField fx:id="titleTextBox" prefHeight="26.0" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="62.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Description:" />
+                  <TextArea fx:id="descriptionTextBox" prefHeight="62.0" prefWidth="149.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Location:" />
+                  <TextField fx:id="locationTextBox" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Contact:" />
+                  <ComboBox fx:id="contactComboBox" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Type:" />
+                  <TextField fx:id="typeTextBox" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Customer ID:" />
+                  <ComboBox fx:id="customerComboBox" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="User ID:" />
+                  <ComboBox fx:id="userComboBox" prefWidth="150.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox layoutX="300.0" layoutY="37.0" prefHeight="187.0" prefWidth="230.0">
+         <children>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Start Date:" />
+                  <DatePicker fx:id="apptDatePicker" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="109.0" text="Start Time (HH:MM)" />
+                  <TextField fx:id="startTimeTextBox" prefHeight="26.0" prefWidth="120.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="43.0" prefWidth="230.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="109.0" text="End Time (HH:MM)" />
+                  <TextField fx:id="endTimeTextBox" prefHeight="26.0" prefWidth="120.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Button fx:id="saveButton" layoutX="300.0" layoutY="224.0" mnemonicParsing="false" onAction="#pressSaveButton" prefHeight="25.0" prefWidth="80.0" text="Save" />
+      <Button fx:id="clearButton" layoutX="402.0" layoutY="224.0" mnemonicParsing="false" onAction="#pressClearButton" prefHeight="25.0" prefWidth="80.0" text="Clear" />
+      <Button fx:id="backButton" layoutX="506.0" layoutY="224.0" mnemonicParsing="false" onAction="#pressBackButton" prefHeight="25.0" prefWidth="80.0" text="Back" />
+      <Label fx:id="timeZoneLabel" layoutX="300.0" layoutY="280.0" prefHeight="18.0" prefWidth="197.0" text="Time Zone" />
+      <Label fx:id="businessHoursLabel" layoutX="300.0" layoutY="308.0" prefHeight="18.0" prefWidth="214.0" text="Business Hours: M-F  08:00-22:00 EST " />
+   </children>
+</AnchorPane>

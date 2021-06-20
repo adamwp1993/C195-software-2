@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.loginPageController">
+   <children>
+      <AnchorPane prefHeight="318.0" prefWidth="326.0">
+         <children>
+            <Label fx:id="titleLabel" alignment="CENTER" layoutX="79.0" layoutY="23.0" prefHeight="39.0" prefWidth="167.0" text="Customer Scheduling " textAlignment="JUSTIFY">
+               <font>
+                  <Font name="Calibri Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="79.0" layoutY="53.0" prefHeight="18.0" prefWidth="167.0" text="Adam Petersen C195">
+               <font>
+                  <Font name="Calibri Light" size="12.0" />
+               </font>
+            </Label>
+            <VBox layoutX="22.0" layoutY="101.0" prefHeight="98.0" prefWidth="283.0" spacing="10.0">
+               <children>
+                  <HBox prefHeight="26.0" prefWidth="265.0">
+                     <children>
+                        <Label fx:id="userNameLabel" prefHeight="26.0" prefWidth="98.0" text="Username">
+                           <font>
+                              <Font name="Calibri Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="userTextBox" alignment="CENTER" prefHeight="26.0" prefWidth="186.0" />
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="passwordLabel" prefHeight="26.0" prefWidth="99.0" text="Password">
+                           <font>
+                              <Font name="Calibri Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="passwordTextBox" alignment="CENTER" prefHeight="26.0" prefWidth="186.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" layoutX="5.0" layoutY="188.0" prefHeight="66.0" prefWidth="306.0" spacing="15.0">
+               <children>
+                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#pressLogonButton" prefHeight="39.0" prefWidth="78.0" text="Login" />
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#pressClearButton" prefHeight="39.0" prefWidth="78.0" text="Clear" />
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#pressExitButton" prefHeight="39.0" prefWidth="78.0" text="Exit" />
+               </children>
+            </HBox>
+            <Label fx:id="zoneLabel" layoutX="22.0" layoutY="254.0" prefHeight="18.0" prefWidth="186.0" text="Label" />
+         </children>
+      </AnchorPane>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>
