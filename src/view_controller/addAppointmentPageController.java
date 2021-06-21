@@ -68,18 +68,15 @@ public class addAppointmentPageController implements Initializable {
 
     public void pressSaveButton(ActionEvent event) throws SQLException {
 
-        // Input validation
-
-        // no overlapping appointments for customers
-        // exception handling
         // insert into DB
         // notify
         // Clear
 
-        Boolean validStartDateTime = null;
-        Boolean validEndDateTime = null;
-        Boolean validOverlap = null;
-        Boolean validBusinessHours = null;
+        Boolean validStartDateTime = true;
+        Boolean validEndDateTime = true;
+        Boolean validOverlap = true;
+        Boolean validBusinessHours = true;
+        String errorMessage = "";
 
 
         String title = titleTextBox.getText();
@@ -95,15 +92,16 @@ public class addAppointmentPageController implements Initializable {
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        // INPUT VALIDATION - check input time
+
+        // INPUT VALIDATION: catch parsing errors for start and enddatetime
         try {
             startDateTime = LocalDateTime.of(apptDatePicker.getValue(),
                     LocalTime.parse(startTimeTextBox.getText(), formatter));
             validStartDateTime = true;
         }
         catch(DateTimeParseException error) {
-            validEndDateTime = false;
-            System.out.println("startDateTime parsing error");
+            validStartDateTime = false;
+            errorMessage += "Invalid Start time. Please ensure proper format HH:MM, including leading 0's.\n";
         }
 
         try {
@@ -113,41 +111,51 @@ public class addAppointmentPageController implements Initializable {
         }
         catch(DateTimeParseException error) {
             validEndDateTime = false;
-            System.out.println("endDateTime parsing error");
+            errorMessage += "Invalid End time. Please ensure proper format HH:MM, including leading 0's.\n";
         }
 
-        // INPUT VALIDATION - check business hours and overlap
+        // INPUT VALIDATION: Ensure all fields have been entered
+        if (title.isBlank() || description.isBlank() || location.isBlank() || contact == null || type.isBlank() ||
+                customerID == null || userID == null || apptDate == null || endDateTime == null ||
+                startDateTime == null) {
+
+            errorMessage += "Please ensure a value has been entered in all fields.\n";
+            // Throw error
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert invalidInput = new Alert(Alert.AlertType.WARNING, errorMessage, clickOkay);
+            invalidInput.showAndWait();
+            return;
+
+        }
+
+        // INPUT VALIDATION: check that business hours are valid and there is no double booked customers.
         validBusinessHours = validateBusinessHours(startDateTime, endDateTime, apptDate);
         validOverlap = validateCustomerOverlap(customerID, startDateTime, endDateTime, apptDate);
 
-
-
-        // Check all Booleans and if any are false, present user with corresponding errors of what they screwed up.
-        // if any of these are wrong, that means what was inserted cannot be inserted to DB.
-        String errorMessage = null;
-        if (!validStartDateTime) {
-            errorMessage += "Invalid Start Date or time. Please ensure proper format HH:MM, including leading 0's.\n";
-        }
-        if (!validEndDateTime) {
-            errorMessage += "Invalid End Date or time. Please ensure proper format HH:MM, including leading 0's.\n";
-        }
+        // INPUT VALIDATION:
         if (!validBusinessHours) {
-            errorMessage += "Invalid Business Hours.(8am to 10pm EST, Not including weekends)\n";
+            errorMessage += "Invalid Business Hours.(8am to 10pm EST)\n";
         }
         if (!validOverlap) {
             errorMessage += "Invalid Customer Overlap. Cannot double book customers.\n";
         }
 
-        // if input is valid, we insert the appt into the DB and display success notification.
+        System.out.println(errorMessage); // TODO - logger
+
+        // INPUT VALIDATION - if any requirements are false, show error and end method.
+        if (!validOverlap || !validBusinessHours || !validEndDateTime || !validStartDateTime) {
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert invalidInput = new Alert(Alert.AlertType.WARNING, errorMessage, clickOkay);
+            invalidInput.showAndWait();
+
+        }
+        else {
+            // if input is valid we insert into DB and display success and clear.
+            // TODO - write AppointmentDB method to insert into the DB. 
+
+        }
 
 
-
-        /*
-        ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-        Alert invalidInput = new Alert(Alert.AlertType.WARNING, "Invalid Start Date or Time. Ensure time is " +
-                "input in HH:MM format.", clickOkay);
-        invalidInput.showAndWait();
-        */
 
 
     }
@@ -271,6 +279,7 @@ public class addAppointmentPageController implements Initializable {
         try {
             customerComboBox.setItems(CustomerDB.getAllCustomerID());
             userComboBox.setItems(UserDB.getAllUserID());
+            contactComboBox.setItems(ContactDB.getAllContactID());
         } catch (SQLException throwables) {
             //TODO - log possible errors
             throwables.printStackTrace();
