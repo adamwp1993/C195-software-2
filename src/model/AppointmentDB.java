@@ -7,6 +7,8 @@ import utility.SqlDatabase;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 
 public class AppointmentDB {
@@ -54,6 +56,37 @@ public class AppointmentDB {
 
         sqlCommand.close();
         return filteredAppts;
+
+    }
+
+    public static void addAppointment(String inputTitle, String inputDescription,
+                                      String inputLocation, String inputType, ZonedDateTime inputStart,
+                                      ZonedDateTime inputEnd, String inputCreatedBy,
+                                       String inputLastUpdateBy, Integer inputCustomerID,
+                                      Integer inputUserID, Integer inputContactID) throws SQLException {
+
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("INSERT INTO appointments " +
+                "(Title, Description, Location, Type, Start, End, Create_date, \n" +
+                "Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID)\n" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        sqlCommand.setString(1, inputTitle);
+        sqlCommand.setString(2, inputDescription);
+        sqlCommand.setString(3, inputLocation);
+        sqlCommand.setString(4, inputType);
+        sqlCommand.setString(5, inputStart.toString());
+        sqlCommand.setString(6, inputEnd.toString());
+        sqlCommand.setString(7, ZonedDateTime.now(ZoneOffset.UTC).toString());
+        sqlCommand.setString(8, inputCreatedBy);
+        sqlCommand.setString(9, ZonedDateTime.now(ZoneOffset.UTC).toString());
+        sqlCommand.setString(10, inputLastUpdateBy);
+        sqlCommand.setInt(11, inputCustomerID);
+        sqlCommand.setInt(12, inputUserID);
+        sqlCommand.setInt(13, inputContactID);
+
+        System.out.println(sqlCommand.toString());
+
+
+
 
     }
 

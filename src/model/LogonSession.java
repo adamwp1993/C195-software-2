@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class LogonSession {
+
     private static User loggedOnUser;
     private static Locale userLocale;
     private static ZoneId userTimeZone;
@@ -44,6 +45,10 @@ public class LogonSession {
 
     }
 
+    public static User getLoggedOnUser() {
+        return loggedOnUser;
+    }
+
     public static Locale getUserLocale() {
         return userLocale;
 
@@ -52,6 +57,7 @@ public class LogonSession {
     public static ZoneId getUserTimeZone() {
         return userTimeZone;
     }
+
 
     public static void logOff() {
         loggedOnUser = null;

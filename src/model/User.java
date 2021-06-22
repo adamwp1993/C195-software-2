@@ -14,5 +14,13 @@ public class User {
 
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
 
 }

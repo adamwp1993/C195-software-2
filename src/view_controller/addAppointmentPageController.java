@@ -89,9 +89,12 @@ public class addAppointmentPageController implements Initializable {
         LocalDate apptDate = apptDatePicker.getValue();
         LocalDateTime endDateTime = null;
         LocalDateTime startDateTime = null;
+        ZonedDateTime zonedEndDateTime = null;
+        ZonedDateTime zonedStartDateTime = null;
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
 
         // INPUT VALIDATION: catch parsing errors for start and enddatetime
         try {
@@ -151,11 +154,18 @@ public class addAppointmentPageController implements Initializable {
         }
         else {
             // if input is valid we insert into DB and display success and clear.
-            // TODO - write AppointmentDB method to insert into the DB. 
+            // prep start and endTime by turning them into a zonedDateTime so we can enter in the DB in UTC.
+            zonedStartDateTime = ZonedDateTime.of(startDateTime, LogonSession.getUserTimeZone());
+            zonedEndDateTime = ZonedDateTime.of(endDateTime, LogonSession.getUserTimeZone());
+            String loggedOnUserName = LogonSession.getLoggedOnUser().getUserName();
+
+            // TODO - fix time zones here
+            // TODO - format the strings in ApptDB.addAppt for the start and end times.
+
+            AppointmentDB.addAppointment(title, description, location, type, zonedStartDateTime, zonedEndDateTime,
+                    loggedOnUserName, loggedOnUserName, customerID, userID, contact );
 
         }
-
-
 
 
     }
