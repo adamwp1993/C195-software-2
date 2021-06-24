@@ -1,5 +1,6 @@
 package model;
 
+import com.mysql.cj.log.Log;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import utility.SqlDatabase;
@@ -147,6 +148,37 @@ public class AppointmentDB {
         }
         sqlCommand.close();
         return allAppointments;
+
+    }
+
+    public ObservableList<Appointment> getAppointmentsIn15Mins() throws SQLException{
+
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // prepare times and convert to UTC
+        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime userTZnow = now.atZone(LogonSession.getUserTimeZone());
+        ZonedDateTime nowUTC = userTZnow.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime utcPlus15 = nowUTC.plusMinutes(15);
+
+        // create input strings
+        String rangeStart = now.format(formatter).toString();
+        String rangeEnd = now.format(formatter).toString();
+        Integer logonUserID = LogonSession.getLoggedOnUser().getUserID();
+
+
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT * FROM appointments WHERE" +
+                "Start BETWEEN ? AND ? AND User_ID = ? ");
+
+        sqlCommand.setString(1, rangeStart);
+        sqlCommand.setString(2, rangeEnd);
+        sqlCommand.setInt(3, logonUserID);
+
+        ResultSet results = sqlCommand.executeQuery();
+        // TODO - start here. populate results and return appointments.
+        // TODO - logonpage controller will then check once successfull logon, and throw notifications for appt's in 15.
 
     }
 }

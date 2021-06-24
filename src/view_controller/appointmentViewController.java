@@ -98,11 +98,10 @@ public class appointmentViewController implements Initializable {
 
 
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
-        // TODO - Handle new appointment, edit, delete
-        // TODO - Throw notification if there is an appointment within 15 mins of login time
-        // TODO - Handle dateTime/ Timezone
+        // TODO - Throw notification if there is an appointment within 15 mins of login time - we will do this upon logon
         // TODO - Month/ week filtering
         //
 

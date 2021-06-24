@@ -281,8 +281,7 @@ public class addAppointmentPageController implements Initializable {
     }
 
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO - fix add "Contact ID" - this needs to be contact name. need to figure out how to do this since
-        // TODO - ID is used as the foreign key.
+
         timeZoneLabel.setText("Your Time Zone:" + LogonSession.getUserTimeZone());
 
         // Disable users from picking dates in the past or weekend.
