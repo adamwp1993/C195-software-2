@@ -36,7 +36,7 @@ public class addAppointmentPageController implements Initializable {
     @FXML
     TextField locationTextBox;
     @ FXML
-    ComboBox<Integer> contactComboBox;
+    ComboBox<String> contactComboBox;
     @ FXML
     TextField typeTextBox;
     @ FXML
@@ -66,11 +66,9 @@ public class addAppointmentPageController implements Initializable {
         window.show();
     }
 
+
     public void pressSaveButton(ActionEvent event) throws SQLException {
 
-        // insert into DB
-        // notify
-        // Clear
 
         Boolean validStartDateTime = true;
         Boolean validEndDateTime = true;
@@ -82,7 +80,7 @@ public class addAppointmentPageController implements Initializable {
         String title = titleTextBox.getText();
         String description = descriptionTextBox.getText();
         String location = locationTextBox.getText();
-        Integer contact = contactComboBox.getValue();
+        String contactName = contactComboBox.getValue();
         String type = typeTextBox.getText();
         Integer customerID = customerComboBox.getValue();
         Integer userID = userComboBox.getValue();
@@ -91,6 +89,9 @@ public class addAppointmentPageController implements Initializable {
         LocalDateTime startDateTime = null;
         ZonedDateTime zonedEndDateTime = null;
         ZonedDateTime zonedStartDateTime = null;
+
+        // take user selected Contact_Name and find the contact_ID FK so we can add to appointments table.
+        Integer contactID = ContactDB.findContactID(contactName);
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -118,7 +119,7 @@ public class addAppointmentPageController implements Initializable {
         }
 
         // INPUT VALIDATION: Ensure all fields have been entered
-        if (title.isBlank() || description.isBlank() || location.isBlank() || contact == null || type.isBlank() ||
+        if (title.isBlank() || description.isBlank() || location.isBlank() || contactName == null || type.isBlank() ||
                 customerID == null || userID == null || apptDate == null || endDateTime == null ||
                 startDateTime == null) {
 
@@ -135,7 +136,7 @@ public class addAppointmentPageController implements Initializable {
         validBusinessHours = validateBusinessHours(startDateTime, endDateTime, apptDate);
         validOverlap = validateCustomerOverlap(customerID, startDateTime, endDateTime, apptDate);
 
-        // INPUT VALIDATION:
+        // INPUT VALIDATION: set corresponding error for user
         if (!validBusinessHours) {
             errorMessage += "Invalid Business Hours.(8am to 10pm EST)\n";
         }
@@ -150,6 +151,7 @@ public class addAppointmentPageController implements Initializable {
             ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
             Alert invalidInput = new Alert(Alert.AlertType.WARNING, errorMessage, clickOkay);
             invalidInput.showAndWait();
+            return;
 
         }
         else {
@@ -159,16 +161,32 @@ public class addAppointmentPageController implements Initializable {
             zonedEndDateTime = ZonedDateTime.of(endDateTime, LogonSession.getUserTimeZone());
             String loggedOnUserName = LogonSession.getLoggedOnUser().getUserName();
 
-            // TODO - fix time zones here
-            // TODO - format the strings in ApptDB.addAppt for the start and end times.
+            // Convert to UTC
+            zonedStartDateTime = zonedStartDateTime.withZoneSameInstant(ZoneOffset.UTC);
+            zonedEndDateTime = zonedEndDateTime.withZoneSameInstant(ZoneOffset.UTC);
 
-            AppointmentDB.addAppointment(title, description, location, type, zonedStartDateTime, zonedEndDateTime,
-                    loggedOnUserName, loggedOnUserName, customerID, userID, contact );
+            // Add appt to DB
+            Boolean success = AppointmentDB.addAppointment(title, description, location, type, zonedStartDateTime,
+                    zonedEndDateTime, loggedOnUserName, loggedOnUserName, customerID, userID, contactID );
+
+            // notify user we successfully added to DB, or if there was an error.
+            if (success) {
+                ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                Alert invalidInput = new Alert(Alert.AlertType.CONFIRMATION, "Appointment added successfully!", clickOkay);
+                invalidInput.showAndWait();
+                pressClearButton();
+                return;
+            }
+            else {
+                ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                Alert invalidInput = new Alert(Alert.AlertType.WARNING, "failed to add appointment", clickOkay);
+                invalidInput.showAndWait();
+            }
 
         }
 
-
     }
+
 
     public void pressClearButton() {
         titleTextBox.clear();
@@ -232,32 +250,27 @@ public class addAppointmentPageController implements Initializable {
         // if conflictApptStart is before newApptEnd & conflictApptStart after newApptStart (startime anywhere in appt)
         // if endtime is before end and endtime is after start (endtime falls anywhere in appt)
         if (possibleConflicts.isEmpty()) {
-            System.out.println("No possible conflicts on same day");
             return true;
         }
         else {
             for (Appointment conflictAppt : possibleConflicts) {
-                System.out.println("Appts in same day, starting evaluation loop");
+
                 LocalDateTime conflictStart = conflictAppt.getStartDateTime().toLocalDateTime();
                 LocalDateTime conflictEnd = conflictAppt.getEndDateTime().toLocalDateTime();
 
                 // Conflict starts before and Conflict ends any time after new appt ends - overlap
                 if( conflictStart.isBefore(startDateTime) & conflictEnd.isAfter(endDateTime)) {
-                    System.out.println("Conflict case 1");
                     return false;
                 }
                 // ConflictAppt start time falls anywhere in the new appt
                 if (conflictStart.isBefore(endDateTime) & conflictStart.isAfter(startDateTime)) {
-                    System.out.println("Conflict case 2");
                     return false;
                 }
                 // ConflictAppt end time falls anywhere in the new appt
                 if (conflictEnd.isBefore(endDateTime) & conflictEnd.isAfter(startDateTime)) {
-                    System.out.println("Conflict case 3");
                     return false;
                 }
                 else {
-                    System.out.println("No conflicts");
                     return true;
                 }
 
@@ -268,10 +281,8 @@ public class addAppointmentPageController implements Initializable {
     }
 
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO - populate comboBoxes
-        // TODO - exception handling if values are left empty
-        // TODO - enter appt into DB
-        // TODO - throw errors
+        // TODO - fix add "Contact ID" - this needs to be contact name. need to figure out how to do this since
+        // TODO - ID is used as the foreign key.
         timeZoneLabel.setText("Your Time Zone:" + LogonSession.getUserTimeZone());
 
         // Disable users from picking dates in the past or weekend.
@@ -289,7 +300,7 @@ public class addAppointmentPageController implements Initializable {
         try {
             customerComboBox.setItems(CustomerDB.getAllCustomerID());
             userComboBox.setItems(UserDB.getAllUserID());
-            contactComboBox.setItems(ContactDB.getAllContactID());
+            contactComboBox.setItems(ContactDB.getAllContactName());
         } catch (SQLException throwables) {
             //TODO - log possible errors
             throwables.printStackTrace();

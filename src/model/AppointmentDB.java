@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class AppointmentDB {
@@ -59,7 +60,7 @@ public class AppointmentDB {
 
     }
 
-    public static void addAppointment(String inputTitle, String inputDescription,
+    public static Boolean addAppointment(String inputTitle, String inputDescription,
                                       String inputLocation, String inputType, ZonedDateTime inputStart,
                                       ZonedDateTime inputEnd, String inputCreatedBy,
                                        String inputLastUpdateBy, Integer inputCustomerID,
@@ -69,23 +70,38 @@ public class AppointmentDB {
                 "(Title, Description, Location, Type, Start, End, Create_date, \n" +
                 "Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID)\n" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        // Format inputStart and inputEnd
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String inputStartString = inputStart.format(formatter).toString();
+        String inputEndString = inputEnd.format(formatter).toString();
+
+        // Set Params
         sqlCommand.setString(1, inputTitle);
         sqlCommand.setString(2, inputDescription);
         sqlCommand.setString(3, inputLocation);
         sqlCommand.setString(4, inputType);
-        sqlCommand.setString(5, inputStart.toString());
-        sqlCommand.setString(6, inputEnd.toString());
-        sqlCommand.setString(7, ZonedDateTime.now(ZoneOffset.UTC).toString());
+        sqlCommand.setString(5, inputStartString);
+        sqlCommand.setString(6, inputEndString);
+        sqlCommand.setString(7, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
         sqlCommand.setString(8, inputCreatedBy);
-        sqlCommand.setString(9, ZonedDateTime.now(ZoneOffset.UTC).toString());
+        sqlCommand.setString(9, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
         sqlCommand.setString(10, inputLastUpdateBy);
         sqlCommand.setInt(11, inputCustomerID);
         sqlCommand.setInt(12, inputUserID);
         sqlCommand.setInt(13, inputContactID);
 
-        System.out.println(sqlCommand.toString());
-
-
+        // Execute query
+        try {
+            sqlCommand.executeUpdate();
+            sqlCommand.close();
+            return true;
+        }
+        catch (SQLException e) {
+            // log error
+            e.printStackTrace();
+            return false;
+        }
 
 
     }
