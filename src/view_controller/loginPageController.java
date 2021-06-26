@@ -1,8 +1,11 @@
 package view_controller;
 
+
+import javafx.collections.ObservableList;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.stage.*;
+import model.Appointment;
 import model.LogonSession;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -53,6 +56,29 @@ public class loginPageController implements Initializable {
     public void pressLogonButton(ActionEvent event) throws IOException, SQLException {
         boolean logon = LogonSession.attemptLogon(userTextBox.getText(), passwordTextBox.getText());
         if (logon) {
+
+            // Get appointments in 15 minutes and display notification if there is.
+            ObservableList<Appointment> upcomingAppts = model.AppointmentDB.getAppointmentsIn15Mins();
+
+            if (!upcomingAppts.isEmpty()) {
+                for (Appointment upcoming : upcomingAppts ) {
+
+                    String message = "Upcoming appointmentID: " + upcoming.getAppointmentID() + " Start: " +
+                            upcoming.getStartDateTime().toString();
+                    ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                    Alert invalidInput = new Alert(Alert.AlertType.WARNING, message, clickOkay);
+                    invalidInput.showAndWait();
+
+                }
+
+            }
+            // If no appointments in 15 minutes, display notification that no upcoming appointments.
+            else {
+                ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                Alert invalidInput = new Alert(Alert.AlertType.CONFIRMATION, "No upcoming Appointments", clickOkay);
+                invalidInput.showAndWait();
+            }
+
             switchScreen(event, "/view_controller/appointmentView.fxml");
 
         }

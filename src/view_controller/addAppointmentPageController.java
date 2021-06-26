@@ -285,6 +285,7 @@ public class addAppointmentPageController implements Initializable {
         timeZoneLabel.setText("Your Time Zone:" + LogonSession.getUserTimeZone());
 
         // Disable users from picking dates in the past or weekend.
+        /*
         apptDatePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate apptDatePicker, boolean empty) {
@@ -294,6 +295,8 @@ public class addAppointmentPageController implements Initializable {
                         apptDatePicker.getDayOfWeek() == DayOfWeek.SUNDAY || apptDatePicker.isBefore(LocalDate.now()));
             }
         });
+
+         */
 
         // Populate ComboBoxes
         try {

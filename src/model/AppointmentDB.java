@@ -151,7 +151,7 @@ public class AppointmentDB {
 
     }
 
-    public ObservableList<Appointment> getAppointmentsIn15Mins() throws SQLException{
+    public static ObservableList<Appointment> getAppointmentsIn15Mins() throws SQLException{
 
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
@@ -164,12 +164,13 @@ public class AppointmentDB {
         ZonedDateTime utcPlus15 = nowUTC.plusMinutes(15);
 
         // create input strings
-        String rangeStart = now.format(formatter).toString();
-        String rangeEnd = now.format(formatter).toString();
+        String rangeStart = nowUTC.format(formatter).toString();
+        String rangeEnd = utcPlus15.format(formatter).toString();
         Integer logonUserID = LogonSession.getLoggedOnUser().getUserID();
 
 
-        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT * FROM appointments WHERE" +
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT * FROM appointments as a " +
+                "LEFT OUTER JOIN contacts as c ON a.Contact_ID = c.Contact_ID WHERE " +
                 "Start BETWEEN ? AND ? AND User_ID = ? ");
 
         sqlCommand.setString(1, rangeStart);
@@ -177,8 +178,35 @@ public class AppointmentDB {
         sqlCommand.setInt(3, logonUserID);
 
         ResultSet results = sqlCommand.executeQuery();
-        // TODO - start here. populate results and return appointments.
-        // TODO - logonpage controller will then check once successfull logon, and throw notifications for appt's in 15.
+
+        while( results.next() ) {
+            // get data from the returned rows
+            Integer appointmentID = results.getInt("Appointment_ID");
+            String title = results.getString("Title");
+            String description = results.getString("Description");
+            String location = results.getString("Location");
+            String type = results.getString("Type");
+            Timestamp startDateTime = results.getTimestamp("Start");
+            Timestamp endDateTime = results.getTimestamp("End");
+            Timestamp createdDate = results.getTimestamp("Create_Date");
+            String createdBy = results.getString("Created_by");
+            Timestamp lastUpdateDateTime = results.getTimestamp("Last_Update");
+            String lastUpdatedBy = results.getString("Last_Updated_By");
+            Integer customerID = results.getInt("Customer_ID");
+            Integer userID = results.getInt("User_ID");
+            Integer contactID = results.getInt("Contact_ID");
+            String contactName = results.getString("Contact_Name");
+
+            Appointment newAppt = new Appointment(
+                    appointmentID, title, description, location, type, startDateTime, endDateTime, createdDate,
+                    createdBy, lastUpdateDateTime, lastUpdatedBy, customerID, userID, contactID, contactName
+            );
+
+            // Add to the observablelist
+            allAppointments.add(newAppt);
+
+        }
+        return allAppointments;
 
     }
 }
