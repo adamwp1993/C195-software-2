@@ -99,7 +99,7 @@ public class AppointmentDB {
             return true;
         }
         catch (SQLException e) {
-            // log error
+            //TODO- log error
             e.printStackTrace();
             return false;
         }
@@ -107,7 +107,25 @@ public class AppointmentDB {
 
     }
 
+    public static Boolean deleteAppointment(Integer inputApptID) throws SQLException {
 
+            PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("DELETE FROM appointments " +
+                    "WHERE Appointment_ID = ?");
+
+            sqlCommand.setInt(1, inputApptID);
+
+        try {
+            sqlCommand.executeUpdate();
+            sqlCommand.close();
+            return true;
+        }
+        catch (SQLException e) {
+            //TODO- log error
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
 

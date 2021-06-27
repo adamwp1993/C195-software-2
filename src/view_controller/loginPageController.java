@@ -108,9 +108,6 @@ public class loginPageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO - create label that displays users login location (zone ID) and timezone
-        //Test your Localization
-        //Locale.setDefault(new Locale("FR"));
 
         Locale userLocale = Locale.getDefault();
         zoneLabel.setText(ZoneId.systemDefault().toString());
