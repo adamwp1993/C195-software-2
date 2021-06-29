@@ -68,7 +68,7 @@
          <children>
             <HBox prefHeight="43.0" prefWidth="230.0">
                <children>
-                  <Label prefHeight="18.0" prefWidth="103.0" text="Start Date:" />
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Date:" />
                   <DatePicker fx:id="apptDatePicker" />
                </children>
             </HBox>

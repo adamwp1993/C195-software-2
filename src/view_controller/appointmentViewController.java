@@ -134,6 +134,22 @@ public class appointmentViewController implements Initializable {
 
     }
 
+
+    public void pressEditButton(ActionEvent event) throws IOException, SQLException {
+        // TODO - catch no selection error and throw warning.
+        Appointment selectedAppt = appointmentTable.getSelectionModel().getSelectedItem();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view_controller/editAppointmentPage.fxml"));
+        Parent parent = loader.load();
+        Scene scene = new Scene(parent);
+        // get the controller and load our selected appointment into it
+        editAppointmentPageController controller = loader.getController();
+        controller.initData(selectedAppt);
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        window.setScene(scene);
+
+    }
+
     public void populateAllAppointments(ObservableList<Appointment> inputList) {
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("appointmentID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("title"));

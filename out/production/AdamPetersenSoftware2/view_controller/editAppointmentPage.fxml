@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.AddAppointmentPageEN">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.editAppointmentPageController">
    <children>
       <VBox layoutX="42.0" layoutY="37.0" prefHeight="350.0" prefWidth="230.0">
          <children>
@@ -69,20 +68,14 @@
          <children>
             <HBox prefHeight="43.0" prefWidth="230.0">
                <children>
-                  <Label prefHeight="18.0" prefWidth="103.0" text="Start Date:" />
-                  <DatePicker fx:id="startDatePicker" />
+                  <Label prefHeight="18.0" prefWidth="103.0" text="Date:" />
+                  <DatePicker fx:id="apptDatePicker" />
                </children>
             </HBox>
             <HBox prefHeight="43.0" prefWidth="230.0">
                <children>
                   <Label prefHeight="18.0" prefWidth="109.0" text="Start Time (HH:MM)" />
                   <TextField fx:id="startTimeTextBox" prefHeight="26.0" prefWidth="120.0" />
-               </children>
-            </HBox>
-            <HBox prefHeight="43.0" prefWidth="230.0">
-               <children>
-                  <Label prefHeight="18.0" prefWidth="103.0" text="End Date:" />
-                  <DatePicker fx:id="endDatePicker" />
                </children>
             </HBox>
             <HBox prefHeight="43.0" prefWidth="230.0">
@@ -96,6 +89,7 @@
       <Button fx:id="saveButton" layoutX="300.0" layoutY="224.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Save" />
       <Button fx:id="clearButton" layoutX="402.0" layoutY="224.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Clear" />
       <Button fx:id="backButton" layoutX="506.0" layoutY="224.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" text="Back" />
-      <Label fx:id="timeZoneLabel" layoutX="300.0" layoutY="14.0" prefHeight="17.0" prefWidth="80.0" text="Time Zone" />
+      <Label fx:id="timeZoneLabel" layoutX="300.0" layoutY="302.0" prefHeight="17.0" prefWidth="80.0" text="Time Zone" />
+      <Label layoutX="300.0" layoutY="279.0" prefHeight="18.0" prefWidth="67.0" text="Time Zone" />
    </children>
 </AnchorPane>
