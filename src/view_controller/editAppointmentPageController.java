@@ -101,6 +101,7 @@ public class editAppointmentPageController implements Initializable {
         customerComboBox.getSelectionModel().select(selectedAppt.getCustomerID());
         userComboBox.setItems(UserDB.getAllUserID());
         userComboBox.getSelectionModel().select(selectedAppt.getUserID());
+        apptDatePicker.setValue(selectedAppt.getStartDateTime().toLocalDateTime().toLocalDate());
         startTimeTextBox.setText(localStartString);
         endTimeTextBox.setText(localEndString);
 
@@ -207,7 +208,7 @@ public class editAppointmentPageController implements Initializable {
         Boolean validBusinessHours = true;
         String errorMessage = "";
 
-        Integer apptID = Integer.getInteger(appointmentIDTextBox.getText());
+        Integer apptID = Integer.parseInt(appointmentIDTextBox.getText());
         String title = titleTextBox.getText();
         String description = descriptionTextBox.getText();
         String location = locationTextBox.getText();
@@ -298,7 +299,7 @@ public class editAppointmentPageController implements Initializable {
 
             // Add appt to DB
 
-            //TODO - find out why this is throwing a nullpointer exception 
+            //TODO - find out why this is throwing a nullpointer exception
             Boolean success = AppointmentDB.updateAppointment(apptID, title, description, location, type, zonedStartDateTime,
                     zonedEndDateTime, loggedOnUserName, customerID, userID, contactID );
 
