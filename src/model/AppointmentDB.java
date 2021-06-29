@@ -61,6 +61,47 @@ public class AppointmentDB {
 
     }
 
+
+    public static Boolean updateAppointment(Integer inputApptID, String inputTitle, String inputDescription,
+                                            String inputLocation, String inputType, ZonedDateTime inputStart,
+                                            ZonedDateTime inputEnd, String inputLastUpdateBy, Integer inputCustomerID,
+                                            Integer inputUserID, Integer inputContactID) throws SQLException {
+
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("UPDATE appointments "
+        + "SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Last_Update=?,Last_Updated_By=?, " +
+                "Customer_ID=?, User_ID=?, Contact_ID=? WHERE Appointment_ID = ?");
+
+        // Format inputStart and inputEnd
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String inputStartString = inputStart.format(formatter).toString();
+        String inputEndString = inputEnd.format(formatter).toString();
+
+        sqlCommand.setString(1,inputTitle);
+        sqlCommand.setString(2, inputDescription);
+        sqlCommand.setString(3, inputLocation);
+        sqlCommand.setString(4, inputType);
+        sqlCommand.setString(5, inputStartString);
+        sqlCommand.setString(6, inputEndString);
+        sqlCommand.setString(7, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+        sqlCommand.setString(8, inputLastUpdateBy);
+        sqlCommand.setInt(9, inputCustomerID);
+        sqlCommand.setInt(10, inputUserID);
+        sqlCommand.setInt(11, inputContactID);
+        sqlCommand.setInt(12, inputApptID);
+
+        try {
+            sqlCommand.executeUpdate();
+            sqlCommand.close();
+            return true;
+        }
+        catch (SQLException e) {
+            //TODO- log error
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public static Boolean addAppointment(String inputTitle, String inputDescription,
                                       String inputLocation, String inputType, ZonedDateTime inputStart,
                                       ZonedDateTime inputEnd, String inputCreatedBy,
