@@ -75,7 +75,7 @@ public class editAppointmentPageController implements Initializable {
         }
         catch (NullPointerException error) {
             ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-            Alert invalidInput = new Alert(Alert.AlertType.WARNING, "No selected Appointment", clickOkay);
+            Alert invalidInput = new Alert(Alert.AlertType.WARNING, "No selected Date", clickOkay);
             invalidInput.showAndWait();
             return;
         }
@@ -298,8 +298,6 @@ public class editAppointmentPageController implements Initializable {
             zonedEndDateTime = zonedEndDateTime.withZoneSameInstant(ZoneOffset.UTC);
 
             // Add appt to DB
-
-            //TODO - find out why this is throwing a nullpointer exception
             Boolean success = AppointmentDB.updateAppointment(apptID, title, description, location, type, zonedStartDateTime,
                     zonedEndDateTime, loggedOnUserName, customerID, userID, contactID );
 
@@ -323,7 +321,6 @@ public class editAppointmentPageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // TODO - Update SQL query in Appointment DB and call it
 
         timeZoneLabel.setText(LogonSession.getUserTimeZone().toString());
 

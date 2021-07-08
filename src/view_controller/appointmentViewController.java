@@ -12,10 +12,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.AppointmentDB;
+import model.LogonSession;
+import utility.SqlDatabase;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -79,6 +82,9 @@ public class appointmentViewController implements Initializable {
 
         // check that user selected an appointment in the table
         if (selectedAppt == null) {
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert invalidInput = new Alert(Alert.AlertType.WARNING, "No selected Appointment", clickOkay);
+            invalidInput.showAndWait();
             return;
         }
         else {
@@ -134,10 +140,36 @@ public class appointmentViewController implements Initializable {
 
     }
 
+    public void pressLogoutButton(ActionEvent event) throws IOException {
+        ButtonType clickYes = ButtonType.YES;
+        ButtonType clickNo = ButtonType.NO;
+        Alert logOff = new Alert(Alert.AlertType.WARNING, "Are you sure you want to Log Off?", clickYes, clickNo);
+        Optional<ButtonType> result = logOff.showAndWait();
+
+        if (result.get() == ButtonType.YES) {
+            LogonSession.logOff();
+            switchScreen(event, "/view_controller/loginPage.fxml");
+        }
+        else {
+            return;
+        }
+
+
+    }
+
 
     public void pressEditButton(ActionEvent event) throws IOException, SQLException {
-        // TODO - catch no selection error and throw warning.
+
         Appointment selectedAppt = appointmentTable.getSelectionModel().getSelectedItem();
+        // throw error if no selection
+        if (selectedAppt == null) {
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert invalidInput = new Alert(Alert.AlertType.WARNING, "No selected Appointment", clickOkay);
+            invalidInput.showAndWait();
+            return;
+
+        }
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view_controller/editAppointmentPage.fxml"));
         Parent parent = loader.load();
@@ -151,6 +183,7 @@ public class appointmentViewController implements Initializable {
     }
 
     public void populateAllAppointments(ObservableList<Appointment> inputList) {
+
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("appointmentID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("description"));
@@ -164,20 +197,47 @@ public class appointmentViewController implements Initializable {
 
     }
 
+    public void checkCanceled(ObservableList<Appointment> inputList) {
+        inputList.forEach((appt) -> {
+            if (appt.getType().equalsIgnoreCase("canceled")) {
+                ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                Alert invalidInput = new Alert(Alert.AlertType.WARNING, "Appointment " + appt.getAppointmentID() +
+                        " is canceled.", clickOkay);
+                invalidInput.showAndWait();
+            }
+        });
+
+    }
+
 
 
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)  {
+    public void initialize(URL location, ResourceBundle resources)   {
         // TODO - Month/ week filtering
-        //
+        ObservableList<Appointment> allAppts = null;
+
 
         try {
-            populateAllAppointments(AppointmentDB.getAllAppointments());
+            allAppts = AppointmentDB.getAllAppointments();
         }
         catch (SQLException error){
+            // Sometimes the connection to DB breaks here.(not sure why) If it does, re-connnect and try again.
             error.printStackTrace();
+            SqlDatabase.connectDB();
+            try {
+                allAppts = AppointmentDB.getAllAppointments();
+            } catch (SQLException anotherError) {
+                anotherError.printStackTrace();
+                ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                Alert invalidInput = new Alert(Alert.AlertType.WARNING, "DB connection failed. please restart", clickOkay);
+                invalidInput.showAndWait();
+                return;
+            }
+
         }
+        populateAllAppointments(allAppts);
+        checkCanceled(allAppts);
 
 
     }

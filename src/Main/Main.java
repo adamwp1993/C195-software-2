@@ -46,5 +46,6 @@ public class Main extends Application{
         SqlDatabase.connectDB();
         launch(args);
 
+
     }
 }
