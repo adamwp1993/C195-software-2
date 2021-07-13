@@ -1,5 +1,6 @@
 package view_controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -86,11 +87,15 @@ public class appointmentViewController implements Initializable {
     }
 
 
-    public void setToggleGroup() {
+    public void initToggleGroup() {
+
+        // TODO - fix toggle groups 
 
         noFilterButton.setToggleGroup(filterToggle);
         weekFilterButton.setToggleGroup(filterToggle);
         monthFilterButton.setToggleGroup(filterToggle);
+
+
 
     }
 
@@ -132,7 +137,7 @@ public class appointmentViewController implements Initializable {
         noFilterButton.setSelected(false);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        ObservableList<Appointment> filteredAppts;
+        ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
         filterRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
 
         // Convert to UTC
@@ -152,19 +157,105 @@ public class appointmentViewController implements Initializable {
 
     }
 
-    public void pressMonthFilterButton(ActionEvent event) {
+    public void pressMonthFilterButton(ActionEvent event) throws SQLException {
+        weekFilterButton.setSelected(false);
+        noFilterButton.setSelected(false);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
         filterRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
-        System.out.println("Do something");
+
+        // Convert to UTC
+        ZonedDateTime startRange = filterRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+        // find end of range
+        ZonedDateTime endRange = startRange.plusMonths(1);
+        // query DB for time frame
+        filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
+        // populate
+        populateAppointments(filteredAppts);
+        // update label
+        selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
+        // update filterRangeMarker to next week.
+        filterRangeMarker.plusMonths(1);
+
 
     }
 
-    public void pressNextButton(ActionEvent event) {
-        System.out.println("Do something");
+    public void pressNextButton(ActionEvent event) throws SQLException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
+
+        if (filterToggle.getSelectedToggle() == weekFilterButton) {
+
+            ZonedDateTime startRange = filterRangeMarker;
+            startRange.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime endRange = startRange.plusWeeks(1);
+
+            filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
+
+            populateAppointments(filteredAppts);
+
+            // update label
+            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
+            // update filterRangeMarker to next week.
+            filterRangeMarker.plusWeeks(1);
+
+        }
+        if (filterToggle.getSelectedToggle() == monthFilterButton) {
+
+            ZonedDateTime startRange = filterRangeMarker;
+            startRange.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime endRange = startRange.plusMonths(1);
+
+            filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
+
+            populateAppointments(filteredAppts);
+
+            // update label
+            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
+            // update filterRangeMarker to next week.
+            filterRangeMarker.plusMonths(1);
+        }
 
     }
 
-    public void pressBackButton(ActionEvent event) {
-        System.out.println("Do something");
+    public void pressBackButton(ActionEvent event) throws SQLException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
+
+        if (filterToggle.getSelectedToggle() == weekFilterButton) {
+
+            ZonedDateTime startRange = filterRangeMarker;
+            startRange.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime endRange = startRange.minusWeeks(1);
+
+            filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
+
+            populateAppointments(filteredAppts);
+
+            // update label
+            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
+            // update filterRangeMarker to next week.
+            filterRangeMarker.minusWeeks(1);
+
+        }
+        if (filterToggle.getSelectedToggle() == monthFilterButton) {
+
+            ZonedDateTime startRange = filterRangeMarker;
+            startRange.withZoneSameInstant(ZoneOffset.UTC);
+            ZonedDateTime endRange = startRange.minusMonths(1);
+
+            filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
+
+            populateAppointments(filteredAppts);
+
+            // update label
+            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
+            // update filterRangeMarker to next week.
+            filterRangeMarker.minusMonths(1);
+        }
 
     }
 
@@ -310,7 +401,7 @@ public class appointmentViewController implements Initializable {
         // TODO - finish week filtering, month filtering, back and forward buttons
 
 
-        setToggleGroup();
+        initToggleGroup();
 
         // populate table view, handle DB connection breakage by retry.
         ObservableList<Appointment> allAppts = null;
