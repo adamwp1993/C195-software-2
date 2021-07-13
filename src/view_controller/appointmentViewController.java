@@ -18,8 +18,10 @@ import utility.SqlDatabase;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.SQLNonTransientConnectionException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -66,6 +68,13 @@ public class appointmentViewController implements Initializable {
     TableColumn<Appointment, ZonedDateTime> endDateTimeColumn;
     @FXML
     TableColumn<Appointment, Integer> customerIdColumn;
+    @FXML
+    ToggleGroup filterToggle;
+    @FXML
+    Label selectedTimeLabel;
+
+    // Variable that holds the range we are filtering on since we move back and forth.
+    ZonedDateTime filterRangeMarker;
 
 
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
@@ -74,6 +83,89 @@ public class appointmentViewController implements Initializable {
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setScene(scene);
         window.show();
+    }
+
+
+    public void setToggleGroup() {
+
+        noFilterButton.setToggleGroup(filterToggle);
+        weekFilterButton.setToggleGroup(filterToggle);
+        monthFilterButton.setToggleGroup(filterToggle);
+
+    }
+
+
+    public void pressNoFilterButton(ActionEvent event) {
+        // only one selection at a time! 
+        monthFilterButton.setSelected(false);
+        weekFilterButton.setSelected(false);
+        
+        ObservableList<Appointment> allAppts;
+        try {
+            allAppts = AppointmentDB.getAllAppointments();
+        }
+        catch (SQLException error){
+            // Sometimes the connection to DB breaks here.(not sure why) If it does, re-connnect and try again.
+            error.printStackTrace();
+            SqlDatabase.connectDB();
+            try {
+                allAppts = AppointmentDB.getAllAppointments();
+            } catch (SQLException anotherError) {
+                anotherError.printStackTrace();
+                ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                Alert invalidInput = new Alert(Alert.AlertType.WARNING, "DB connection failed. please restart", clickOkay);
+                invalidInput.showAndWait();
+                return;
+            }
+
+        }
+        populateAppointments(allAppts);
+        selectedTimeLabel.setText("All Appointments");
+        filterRangeMarker = null;
+
+
+    }
+
+    public void pressWeekFilterButton(ActionEvent event) throws SQLException {
+        // Only one selection at a time! 
+        monthFilterButton.setSelected(false);
+        noFilterButton.setSelected(false);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        ObservableList<Appointment> filteredAppts;
+        filterRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
+
+        // Convert to UTC
+        ZonedDateTime startRange = filterRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+        // find end of range
+        ZonedDateTime endRange = startRange.plusWeeks(1);
+        // query DB for time frame
+        filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
+        // populate
+        populateAppointments(filteredAppts);
+        // update label
+        selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
+        // update filterRangeMarker to next week.
+        filterRangeMarker.plusWeeks(1);
+
+
+
+    }
+
+    public void pressMonthFilterButton(ActionEvent event) {
+        filterRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
+        System.out.println("Do something");
+
+    }
+
+    public void pressNextButton(ActionEvent event) {
+        System.out.println("Do something");
+
+    }
+
+    public void pressBackButton(ActionEvent event) {
+        System.out.println("Do something");
+
     }
 
     public void pressDeleteButton(ActionEvent event) throws IOException, SQLException {
@@ -107,7 +199,7 @@ public class appointmentViewController implements Initializable {
 
                 }
                 else {
-                    //TODO - log error and display error to user
+                    //TODO - log error if it occurs
                     ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
                     Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Failed to delete Appointment", clickOkay);
                     deleteAppt.showAndWait();
@@ -116,7 +208,7 @@ public class appointmentViewController implements Initializable {
 
                 // Re-load appointments on screen
                 try {
-                    populateAllAppointments(AppointmentDB.getAllAppointments());
+                    populateAppointments(AppointmentDB.getAllAppointments());
                 }
                 catch (SQLException error){
                     //TODO - log error
@@ -127,10 +219,7 @@ public class appointmentViewController implements Initializable {
             else {
                 return;
             }
-
-
         }
-
     }
 
 
@@ -182,7 +271,8 @@ public class appointmentViewController implements Initializable {
 
     }
 
-    public void populateAllAppointments(ObservableList<Appointment> inputList) {
+    public void populateAppointments(ObservableList<Appointment> inputList) {
+        // Takes an observable list of appointments and populates them on screen.
 
         appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("appointmentID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<Appointment, String>("title"));
@@ -198,6 +288,7 @@ public class appointmentViewController implements Initializable {
     }
 
     public void checkCanceled(ObservableList<Appointment> inputList) {
+
         inputList.forEach((appt) -> {
             if (appt.getType().equalsIgnoreCase("canceled")) {
                 ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
@@ -214,10 +305,15 @@ public class appointmentViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources)   {
-        // TODO - Month/ week filtering
+
+        // TODO - start here
+        // TODO - finish week filtering, month filtering, back and forward buttons
+
+
+        setToggleGroup();
+
+        // populate table view, handle DB connection breakage by retry.
         ObservableList<Appointment> allAppts = null;
-
-
         try {
             allAppts = AppointmentDB.getAllAppointments();
         }
@@ -236,7 +332,7 @@ public class appointmentViewController implements Initializable {
             }
 
         }
-        populateAllAppointments(allAppts);
+        populateAppointments(allAppts);
         checkCanceled(allAppts);
 
 

@@ -15,6 +15,56 @@ import java.time.format.DateTimeFormatter;
 
 public class AppointmentDB {
 
+    public static ObservableList<Appointment> getDateFilteredAppointments(ZonedDateTime startRange, ZonedDateTime endRange)
+            throws SQLException {
+        
+        ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "SELECT * FROM appointments as a LEFT OUTER JOIN contacts as c ON a.Contact_ID = c.Contact_ID WHERE" +
+                        " Start between ? AND ?"
+        );
+
+        String startRangeString = startRange.format(formatter);
+        String endRangeString = endRange.format(formatter);
+
+        sqlCommand.setString(1, startRangeString);
+        sqlCommand.setString(2, endRangeString);
+
+        ResultSet results = sqlCommand.executeQuery();
+
+        while( results.next() ) {
+            // get data from the returned rows
+            Integer appointmentID = results.getInt("Appointment_ID");
+            String title = results.getString("Title");
+            String description = results.getString("Description");
+            String location = results.getString("Location");
+            String type = results.getString("Type");
+            Timestamp startDateTime = results.getTimestamp("Start");
+            Timestamp endDateTime = results.getTimestamp("End");
+            Timestamp createdDate = results.getTimestamp("Create_Date");
+            String createdBy = results.getString("Created_by");
+            Timestamp lastUpdateDateTime = results.getTimestamp("Last_Update");
+            String lastUpdatedBy = results.getString("Last_Updated_By");
+            Integer customerID = results.getInt("Customer_ID");
+            Integer userID = results.getInt("User_ID");
+            Integer contactID = results.getInt("Contact_ID");
+            String contactName = results.getString("Contact_Name");
+
+            // populate into an appt object
+            Appointment newAppt = new Appointment(
+                    appointmentID, title, description, location, type, startDateTime, endDateTime, createdDate,
+                    createdBy, lastUpdateDateTime, lastUpdatedBy, customerID, userID, contactID, contactName
+            );
+            filteredAppts.add(newAppt);
+        }
+
+        sqlCommand.close();
+        return filteredAppts;
+
+    }
+
     public static ObservableList<Appointment> getCustomerFilteredAppointments(
             LocalDate apptDate, Integer inputCustomerID) throws SQLException {
         // Prepare SQL statement

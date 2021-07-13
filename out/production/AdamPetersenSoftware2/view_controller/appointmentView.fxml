@@ -10,9 +10,9 @@
 
 <AnchorPane prefHeight="506.0" prefWidth="834.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.appointmentViewController">
    <children>
-      <RadioButton fx:id="monthFilterButton" layoutX="14.0" layoutY="420.0" mnemonicParsing="false" text="Filter by month " />
-      <RadioButton fx:id="weekFilterButton" layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Filter by Week " />
-      <RadioButton fx:id="noFilterButton" layoutX="14.0" layoutY="472.0" mnemonicParsing="false" text="All / No Filter ">
+      <RadioButton fx:id="monthFilterButton" layoutX="14.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressMonthFilterButton" text="Filter by month " />
+      <RadioButton fx:id="weekFilterButton" layoutX="14.0" layoutY="446.0" mnemonicParsing="false" onAction="#pressWeekFilterButton" text="Filter by Week " />
+      <RadioButton fx:id="noFilterButton" layoutX="14.0" layoutY="472.0" mnemonicParsing="false" onAction="#pressNoFilterButton" text="All / No Filter ">
          <font>
             <Font name="Calibri" size="12.0" />
          </font>
@@ -35,9 +35,9 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="selectedTimeLabel" layoutX="271.0" layoutY="416.0" prefHeight="18.0" prefWidth="102.0" text="All Appointments" />
-      <Button fx:id="previousTimeButton" layoutX="129.0" layoutY="454.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="101.0" text="Previous" />
-      <Button fx:id="nextTimeButton" layoutX="251.0" layoutY="454.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="101.0" text="Next" />
+      <Label fx:id="selectedTimeLabel" layoutX="263.0" layoutY="416.0" prefHeight="18.0" prefWidth="150.0" text="All Appointments" />
+      <Button fx:id="previousTimeButton" layoutX="129.0" layoutY="454.0" mnemonicParsing="false" onAction="#pressBackButton" prefHeight="26.0" prefWidth="101.0" text="Previous" />
+      <Button fx:id="nextTimeButton" layoutX="251.0" layoutY="454.0" mnemonicParsing="false" onAction="#pressNextButton" prefHeight="26.0" prefWidth="101.0" text="Next" />
       <Button fx:id="newAppointmentButton" layoutX="416.0" layoutY="412.0" mnemonicParsing="false" onAction="#pressNewButton" prefHeight="26.0" prefWidth="74.0" text="New" />
       <Button fx:id="editAppointmentButton" layoutX="511.0" layoutY="412.0" mnemonicParsing="false" onAction="#pressEditButton" prefHeight="26.0" prefWidth="74.0" text="Edit" />
       <Button fx:id="customersViewButton" layoutX="416.0" layoutY="454.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Customers" />
