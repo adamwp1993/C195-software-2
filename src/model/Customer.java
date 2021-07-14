@@ -13,11 +13,12 @@ public class Customer {
     private String createdBy;
     private Timestamp lastUpdate;
     private String lastUpdateBy;
-    private Integer divisionID;
+    private String division;
+    private String country;
 
     public Customer(Integer inputCustomerID, String inputName, String inputAddress, String inputPostalCode,
                     String inputPhoneNumber, Timestamp inputCreateDate, String inputCreatedBy,
-                    Timestamp inputLastUpdate, String inputLastUpdateBy, Integer inputDivisionID) {
+                    Timestamp inputLastUpdate, String inputLastUpdateBy, String inputDivision, String inputCountry) {
         ID = inputCustomerID;
         name = inputName;
         address = inputAddress;
@@ -27,7 +28,8 @@ public class Customer {
         createdBy = inputCreatedBy;
         lastUpdate = inputLastUpdate;
         lastUpdateBy = inputLastUpdateBy;
-        divisionID = inputDivisionID;
+        division = inputDivision;
+        country = inputCountry;
     }
 
 
@@ -68,7 +70,9 @@ public class Customer {
         return lastUpdateBy;
     }
 
-    public Integer getDivisionID() {
-        return divisionID;
+    public String getDivision() {
+        return division;
     }
+
+    public String getCountry() { return country; }
 }

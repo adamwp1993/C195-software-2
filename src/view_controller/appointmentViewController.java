@@ -74,7 +74,7 @@ public class appointmentViewController implements Initializable {
     @FXML
     Label selectedTimeLabel;
 
-    // Variable that holds the range we are filtering on since we move back and forth.
+    // Markers for date filtering.
     ZonedDateTime startRangeMarker;
     ZonedDateTime endRangeMarker;
 
@@ -90,7 +90,6 @@ public class appointmentViewController implements Initializable {
 
     public void initToggleGroup() {
 
-        // TODO - fix toggle groups
         filterToggle = new ToggleGroup();
 
         noFilterButton.setToggleGroup(filterToggle);
@@ -133,6 +132,7 @@ public class appointmentViewController implements Initializable {
 
     }
 
+
     public void pressWeekFilterButton(ActionEvent event) throws SQLException {
         // Only one selection at a time! 
         monthFilterButton.setSelected(false);
@@ -161,6 +161,7 @@ public class appointmentViewController implements Initializable {
 
     }
 
+
     public void pressMonthFilterButton(ActionEvent event) throws SQLException {
         weekFilterButton.setSelected(false);
         noFilterButton.setSelected(false);
@@ -186,6 +187,7 @@ public class appointmentViewController implements Initializable {
 
 
     }
+
 
     public void pressNextButton(ActionEvent event) throws SQLException {
 
@@ -239,9 +241,9 @@ public class appointmentViewController implements Initializable {
 
     }
 
+
     public void pressBackButton(ActionEvent event) throws SQLException {
 
-        // TODO - fix this - the values are backward so its messing up the SQL query. they need to be flipped
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
@@ -291,6 +293,7 @@ public class appointmentViewController implements Initializable {
         }
 
     }
+
 
     public void pressDeleteButton(ActionEvent event) throws IOException, SQLException {
 
@@ -347,11 +350,11 @@ public class appointmentViewController implements Initializable {
     }
 
 
-
     public void pressNewButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/addAppointmentPage.fxml");
 
     }
+
 
     public void pressLogoutButton(ActionEvent event) throws IOException {
         ButtonType clickYes = ButtonType.YES;
@@ -395,6 +398,13 @@ public class appointmentViewController implements Initializable {
 
     }
 
+
+    public void pressCustomerButton(ActionEvent event) throws IOException {
+
+        switchScreen(event, "/view_controller/customerView.fxml");
+
+    }
+
     public void populateAppointments(ObservableList<Appointment> inputList) {
         // Takes an observable list of appointments and populates them on screen.
 
@@ -429,9 +439,6 @@ public class appointmentViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources)   {
-
-        // TODO - start here
-        // TODO - finish week filtering, month filtering, back and forward buttons
 
         noFilterButton.setSelected(true);
         initToggleGroup();

@@ -22,10 +22,13 @@ public class CustomerDB {
     }
 
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
-
+        // TODO - start here 
         // Prepare SQL and execute query
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT * FROM customers;");
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "SELECT cx.Customer_ID, cx.Customer_Name, cx.Address, cx.Postal_Code, cx.Phone, cx.Division_ID, " +
+                        "f.Division, f.COUNTRY_ID, co.Country FROM customers as cx INNER JOIN first_level_divisions " +
+                        "as f on cx.Division_ID = f.Division_ID INNER JOIN countries as co ON f.COUNTRY_ID = co.Country_ID");
         ResultSet results = sqlCommand.executeQuery();
 
 
@@ -43,8 +46,8 @@ public class CustomerDB {
             Integer custDivisionID = results.getInt("Division_ID");
 
             // populate into an customer object
-            Customer newCust = new Customer(custID, custName, custAddress, custPostalCode, custPhoneNum, custCreateDate,
-                    custCreatedBy, custLastUpdate, custLastUpdateBy, custDivisionID);
+            //Customer newCust = new Customer(custID, custName, custAddress, custPostalCode, custPhoneNum, custCreateDate,
+            //       custCreatedBy, custLastUpdate, custLastUpdateBy, custDivisionID);
 
 
             // Add to the observablelist
