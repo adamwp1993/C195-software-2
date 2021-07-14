@@ -75,7 +75,8 @@ public class appointmentViewController implements Initializable {
     Label selectedTimeLabel;
 
     // Variable that holds the range we are filtering on since we move back and forth.
-    ZonedDateTime filterRangeMarker;
+    ZonedDateTime startRangeMarker;
+    ZonedDateTime endRangeMarker;
 
 
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
@@ -89,7 +90,8 @@ public class appointmentViewController implements Initializable {
 
     public void initToggleGroup() {
 
-        // TODO - fix toggle groups 
+        // TODO - fix toggle groups
+        filterToggle = new ToggleGroup();
 
         noFilterButton.setToggleGroup(filterToggle);
         weekFilterButton.setToggleGroup(filterToggle);
@@ -126,7 +128,7 @@ public class appointmentViewController implements Initializable {
         }
         populateAppointments(allAppts);
         selectedTimeLabel.setText("All Appointments");
-        filterRangeMarker = null;
+        startRangeMarker = null;
 
 
     }
@@ -138,20 +140,22 @@ public class appointmentViewController implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
-        filterRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
+        startRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
+        endRangeMarker = startRangeMarker.plusWeeks(1);
 
         // Convert to UTC
-        ZonedDateTime startRange = filterRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
-        // find end of range
-        ZonedDateTime endRange = startRange.plusWeeks(1);
+        ZonedDateTime startRange = startRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime endRange = endRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+
         // query DB for time frame
         filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
         // populate
         populateAppointments(filteredAppts);
         // update label
-        selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
+        selectedTimeLabel.setText(startRangeMarker.format(formatter) + " - " + endRangeMarker.format(formatter) + " " +
+                LogonSession.getUserTimeZone());
         // update filterRangeMarker to next week.
-        filterRangeMarker.plusWeeks(1);
+
 
 
 
@@ -164,20 +168,21 @@ public class appointmentViewController implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
-        filterRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
+        startRangeMarker = ZonedDateTime.now(LogonSession.getUserTimeZone());
+        endRangeMarker = startRangeMarker.plusMonths(1);
 
         // Convert to UTC
-        ZonedDateTime startRange = filterRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
-        // find end of range
-        ZonedDateTime endRange = startRange.plusMonths(1);
+        ZonedDateTime startRange = startRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime endRange = endRangeMarker.withZoneSameInstant(ZoneOffset.UTC);
+
         // query DB for time frame
         filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
         // populate
         populateAppointments(filteredAppts);
         // update label
-        selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
-        // update filterRangeMarker to next week.
-        filterRangeMarker.plusMonths(1);
+        selectedTimeLabel.setText(startRangeMarker.format(formatter) + " - " + endRangeMarker.format(formatter) + " " +
+                LogonSession.getUserTimeZone());
+
 
 
     }
@@ -189,72 +194,100 @@ public class appointmentViewController implements Initializable {
 
         if (filterToggle.getSelectedToggle() == weekFilterButton) {
 
-            ZonedDateTime startRange = filterRangeMarker;
-            startRange.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime endRange = startRange.plusWeeks(1);
+            ZonedDateTime startRange = startRangeMarker.plusWeeks(1);
+            ZonedDateTime endRange = endRangeMarker.plusWeeks(1);
+
+            // update markers
+            startRangeMarker = startRange;
+            endRangeMarker = endRange;
+
+            // convert to UTC for the DB
+            startRange = startRange.withZoneSameInstant(ZoneOffset.UTC);
+            endRange = endRange.withZoneSameInstant(ZoneOffset.UTC);
 
             filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
 
             populateAppointments(filteredAppts);
 
             // update label
-            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
-            // update filterRangeMarker to next week.
-            filterRangeMarker.plusWeeks(1);
+            selectedTimeLabel.setText(startRangeMarker.format(formatter) + " - " + endRangeMarker.format(formatter) + " " +
+                    LogonSession.getUserTimeZone());
 
         }
         if (filterToggle.getSelectedToggle() == monthFilterButton) {
 
-            ZonedDateTime startRange = filterRangeMarker;
-            startRange.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime endRange = startRange.plusMonths(1);
+            ZonedDateTime startRange = startRangeMarker.plusMonths(1);
+            ZonedDateTime endRange = endRangeMarker.plusMonths(1);
+
+            // update markers
+            startRangeMarker = startRange;
+            endRangeMarker = endRange;
+
+            // convert to UTC for the DB
+            startRange = startRange.withZoneSameInstant(ZoneOffset.UTC);
+            endRange = endRange.withZoneSameInstant(ZoneOffset.UTC);
 
             filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
 
             populateAppointments(filteredAppts);
 
             // update label
-            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
-            // update filterRangeMarker to next week.
-            filterRangeMarker.plusMonths(1);
+            selectedTimeLabel.setText(startRangeMarker.format(formatter) + " - " + endRangeMarker.format(formatter) + " " +
+                    LogonSession.getUserTimeZone());
+
         }
 
     }
 
     public void pressBackButton(ActionEvent event) throws SQLException {
+
+        // TODO - fix this - the values are backward so its messing up the SQL query. they need to be flipped
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         ObservableList<Appointment> filteredAppts = FXCollections.observableArrayList();
 
         if (filterToggle.getSelectedToggle() == weekFilterButton) {
 
-            ZonedDateTime startRange = filterRangeMarker;
-            startRange.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime endRange = startRange.minusWeeks(1);
+            ZonedDateTime startRange = startRangeMarker.minusWeeks(1);
+            ZonedDateTime endRange = endRangeMarker.minusWeeks(1);
+
+            // update markers
+            startRangeMarker = startRange;
+            endRangeMarker = endRange;
+
+            // convert to UTC for the DB
+            startRange = startRange.withZoneSameInstant(ZoneOffset.UTC);
+            endRange = endRange.withZoneSameInstant(ZoneOffset.UTC);
 
             filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
 
             populateAppointments(filteredAppts);
 
             // update label
-            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
-            // update filterRangeMarker to next week.
-            filterRangeMarker.minusWeeks(1);
+            selectedTimeLabel.setText(startRangeMarker.format(formatter) + " - " + endRangeMarker.format(formatter) + " " +
+                    LogonSession.getUserTimeZone());
 
         }
         if (filterToggle.getSelectedToggle() == monthFilterButton) {
 
-            ZonedDateTime startRange = filterRangeMarker;
-            startRange.withZoneSameInstant(ZoneOffset.UTC);
-            ZonedDateTime endRange = startRange.minusMonths(1);
+            ZonedDateTime startRange = startRangeMarker.minusMonths(1);
+            ZonedDateTime endRange = endRangeMarker.minusMonths(1);
+
+            // update markers
+            startRangeMarker = startRange;
+            endRangeMarker = endRange;
+
+            // convert to UTC for the DB
+            startRange = startRange.withZoneSameInstant(ZoneOffset.UTC);
+            endRange = endRange.withZoneSameInstant(ZoneOffset.UTC);
 
             filteredAppts = AppointmentDB.getDateFilteredAppointments(startRange, endRange);
 
             populateAppointments(filteredAppts);
 
             // update label
-            selectedTimeLabel.setText(startRange.format(formatter) + " - " + endRange.format(formatter));
-            // update filterRangeMarker to next week.
-            filterRangeMarker.minusMonths(1);
+            selectedTimeLabel.setText(startRangeMarker.format(formatter) + " - " + endRangeMarker.format(formatter) + " " +
+                    LogonSession.getUserTimeZone());
         }
 
     }
@@ -400,7 +433,7 @@ public class appointmentViewController implements Initializable {
         // TODO - start here
         // TODO - finish week filtering, month filtering, back and forward buttons
 
-
+        noFilterButton.setSelected(true);
         initToggleGroup();
 
         // populate table view, handle DB connection breakage by retry.

@@ -35,14 +35,17 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="selectedTimeLabel" layoutX="263.0" layoutY="416.0" prefHeight="18.0" prefWidth="150.0" text="All Appointments" />
-      <Button fx:id="previousTimeButton" layoutX="129.0" layoutY="454.0" mnemonicParsing="false" onAction="#pressBackButton" prefHeight="26.0" prefWidth="101.0" text="Previous" />
-      <Button fx:id="nextTimeButton" layoutX="251.0" layoutY="454.0" mnemonicParsing="false" onAction="#pressNextButton" prefHeight="26.0" prefWidth="101.0" text="Next" />
-      <Button fx:id="newAppointmentButton" layoutX="416.0" layoutY="412.0" mnemonicParsing="false" onAction="#pressNewButton" prefHeight="26.0" prefWidth="74.0" text="New" />
-      <Button fx:id="editAppointmentButton" layoutX="511.0" layoutY="412.0" mnemonicParsing="false" onAction="#pressEditButton" prefHeight="26.0" prefWidth="74.0" text="Edit" />
-      <Button fx:id="customersViewButton" layoutX="416.0" layoutY="454.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Customers" />
-      <Button fx:id="logOutButton" layoutX="610.0" layoutY="454.0" mnemonicParsing="false" onAction="#pressLogoutButton" prefHeight="26.0" prefWidth="74.0" text="Log out" />
-      <Button fx:id="deleteButton" layoutX="610.0" layoutY="412.0" mnemonicParsing="false" onAction="#pressDeleteButton" prefHeight="26.0" prefWidth="74.0" text="Delete" />
-      <Button fx:id="reportsButton" layoutX="511.0" layoutY="454.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Reports" />
+      <Label fx:id="selectedTimeLabel" layoutX="129.0" layoutY="437.0" prefHeight="18.0" prefWidth="350.0" text="All Appointments">
+         <font>
+            <Font size="10.0" />
+         </font></Label>
+      <Button fx:id="previousTimeButton" layoutX="129.0" layoutY="466.0" mnemonicParsing="false" onAction="#pressBackButton" prefHeight="26.0" prefWidth="101.0" text="Previous" />
+      <Button fx:id="nextTimeButton" layoutX="254.0" layoutY="466.0" mnemonicParsing="false" onAction="#pressNextButton" prefHeight="26.0" prefWidth="101.0" text="Next" />
+      <Button fx:id="newAppointmentButton" layoutX="504.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressNewButton" prefHeight="26.0" prefWidth="74.0" text="New" />
+      <Button fx:id="editAppointmentButton" layoutX="599.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressEditButton" prefHeight="26.0" prefWidth="74.0" text="Edit" />
+      <Button fx:id="customersViewButton" layoutX="504.0" layoutY="462.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Customers" />
+      <Button fx:id="logOutButton" layoutX="698.0" layoutY="462.0" mnemonicParsing="false" onAction="#pressLogoutButton" prefHeight="26.0" prefWidth="74.0" text="Log out" />
+      <Button fx:id="deleteButton" layoutX="698.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressDeleteButton" prefHeight="26.0" prefWidth="74.0" text="Delete" />
+      <Button fx:id="reportsButton" layoutX="599.0" layoutY="462.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Reports" />
    </children>
 </AnchorPane>
