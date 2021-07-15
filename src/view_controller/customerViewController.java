@@ -15,9 +15,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
+import model.CustomerDB;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class customerViewController implements Initializable {
@@ -57,6 +59,27 @@ public class customerViewController implements Initializable {
     public void populateCustomers(ObservableList<Customer> inputList) {
         customerIDColumn.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerID"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("name"));
+        countryColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("country"));
+        divisionColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("division"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("address"));
+        postalCodeColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("postalCode"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("phoneNumber"));
+
+        customerTable.setItems(inputList);
+
+    }
+
+
+    public void pressAddButton(ActionEvent event) {
+
+    }
+
+    public void pressEditButton(ActionEvent event) {
+
+    }
+
+
+    public void pressDeleteButton(ActionEvent event) {
 
     }
 
@@ -68,6 +91,12 @@ public class customerViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        try {
+            populateCustomers(CustomerDB.getAllCustomers());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
 

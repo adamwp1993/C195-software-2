@@ -43,7 +43,7 @@
       <Button fx:id="nextTimeButton" layoutX="254.0" layoutY="466.0" mnemonicParsing="false" onAction="#pressNextButton" prefHeight="26.0" prefWidth="101.0" text="Next" />
       <Button fx:id="newAppointmentButton" layoutX="504.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressNewButton" prefHeight="26.0" prefWidth="74.0" text="New" />
       <Button fx:id="editAppointmentButton" layoutX="599.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressEditButton" prefHeight="26.0" prefWidth="74.0" text="Edit" />
-      <Button fx:id="customersViewButton" layoutX="504.0" layoutY="462.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Customers" />
+      <Button fx:id="customersViewButton" layoutX="504.0" layoutY="462.0" mnemonicParsing="false" onAction="#pressCustomerButton" prefHeight="26.0" prefWidth="74.0" text="Customers" />
       <Button fx:id="logOutButton" layoutX="698.0" layoutY="462.0" mnemonicParsing="false" onAction="#pressLogoutButton" prefHeight="26.0" prefWidth="74.0" text="Log out" />
       <Button fx:id="deleteButton" layoutX="698.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressDeleteButton" prefHeight="26.0" prefWidth="74.0" text="Delete" />
       <Button fx:id="reportsButton" layoutX="599.0" layoutY="462.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Reports" />

@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-
 <AnchorPane prefHeight="506.0" prefWidth="834.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.customerViewController">
    <children>
       <TableView fx:id="customerTable" layoutX="14.0" layoutY="14.0" prefHeight="361.0" prefWidth="801.0">
@@ -23,14 +22,14 @@
       </TableView>
       <HBox alignment="CENTER" layoutX="14.0" layoutY="382.0" prefHeight="45.0" prefWidth="409.0" spacing="15.0" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="411.0" AnchorPane.topAnchor="382.0">
          <children>
-            <Button fx:id="addButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Add">
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#pressAddButton" prefHeight="25.0" prefWidth="81.0" text="Add">
                <padding>
                   <Insets right="10.0" />
                </padding>
             </Button>
-            <Button fx:id="editButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Edit" />
-            <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Delete" />
-            <Button fx:id="backButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Back" />
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#pressEditButton" prefHeight="25.0" prefWidth="81.0" text="Edit" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#pressDeleteButton" prefHeight="25.0" prefWidth="81.0" text="Delete" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#pressBackButton" prefHeight="25.0" prefWidth="81.0" text="Back" />
          </children>
          <padding>
             <Insets left="10.0" right="10.0" />
