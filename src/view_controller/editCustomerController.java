@@ -1,8 +1,10 @@
 package view_controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
+import javafx.event.*;
+
+import java.io.IOException;
+import java.lang.*;
+import java.lang.Integer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,15 +13,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Customer;
 import model.CustomerDB;
+import org.w3c.dom.Text;
 
-
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class addCustomerController implements Initializable {
+public class editCustomerController implements Initializable {
+
     @FXML
     TextField customerIDTextBox;
     @FXML
@@ -27,13 +30,13 @@ public class addCustomerController implements Initializable {
     @FXML
     ComboBox<String> divisionComboBox;
     @FXML
-    TextField customerNameTextBox;
+    TextField nameTextBox;
     @FXML
     TextField addressTextBox;
     @FXML
     TextField postalCodeTextBox;
     @FXML
-    TextField phoneNumberTextBox;
+    TextField phoneTextBox;
     @FXML
     Button saveButton;
     @FXML
@@ -41,6 +44,21 @@ public class addCustomerController implements Initializable {
     @FXML
     Button backButton;
 
+    public void initData(Customer selectedCustomer) throws SQLException {
+
+        countryComboBox.setItems(CustomerDB.getAllCountries());
+        countryComboBox.getSelectionModel().select(selectedCustomer.getCountry());
+        divisionComboBox.setItems(CustomerDB.getFilteredDivisions(selectedCustomer.getCountry()));
+        divisionComboBox.getSelectionModel().select(selectedCustomer.getDivision());
+
+        customerIDTextBox.setText(selectedCustomer.getCustomerID().toString());
+        nameTextBox.setText(selectedCustomer.getName());
+        addressTextBox.setText(selectedCustomer.getAddress());
+        postalCodeTextBox.setText(selectedCustomer.getPostalCode());
+        phoneTextBox.setText(selectedCustomer.getPhoneNumber());
+
+
+    }
 
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
@@ -50,17 +68,18 @@ public class addCustomerController implements Initializable {
         window.show();
     }
 
-    public void pressSaveButton(ActionEvent event) throws SQLException, IOException {
+    public void pressSaveButton(ActionEvent event) throws IOException, SQLException {
         // INPUT VALIDATION - check for nulls
         String country = countryComboBox.getValue();
         String division = divisionComboBox.getValue();
-        String name = customerNameTextBox.getText();
+        String name = nameTextBox.getText();
         String address = addressTextBox.getText();
         String postalCode = postalCodeTextBox.getText();
-        String phone = phoneNumberTextBox.getText();
+        String phone = phoneTextBox.getText();
+        Integer customerID = Integer.parseInt(customerIDTextBox.getText());
 
         if (country.isBlank() || division.isBlank() || name.isBlank() || address.isBlank() || postalCode.isBlank() ||
-        phone.isBlank()) {
+                phone.isBlank()) {
 
             ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
             Alert emptyVal = new Alert(Alert.AlertType.WARNING, "Please ensure all fields are completed.",
@@ -70,51 +89,37 @@ public class addCustomerController implements Initializable {
 
         }
 
-        // Add customer to DB
-        Boolean success = CustomerDB.addCustomer(country, division, name, address, postalCode, phone,
-                CustomerDB.getSpecificDivisionID(division));
+        // CustomerDB updateCustomer
+        Boolean success = CustomerDB.updateCustomer(division, name, address, postalCode, phone, customerID);
 
-        // notify user we successfully added to DB, or if there was an error.
         if (success) {
             ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Customer added successfully!", clickOkay);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Appointment updated successfully!", clickOkay);
             alert.showAndWait();
-            pressClearButton(event);
             switchScreen(event, "/view_controller/customerView.fxml");
         }
         else {
             ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Failed to add Customer", clickOkay);
-            alert.showAndWait();
-            return;
+            Alert invalidInput = new Alert(Alert.AlertType.WARNING, "failed to Update appointment", clickOkay);
+            invalidInput.showAndWait();
         }
-
     }
 
     public void pressClearButton(ActionEvent event) {
-        countryComboBox.getItems().clear();
-        divisionComboBox.getItems().clear();
-        customerNameTextBox.clear();
+        countryComboBox.getSelectionModel().clearSelection();
+        divisionComboBox.getSelectionModel().clearSelection();
+        nameTextBox.clear();
         addressTextBox.clear();
         postalCodeTextBox.clear();
-        phoneNumberTextBox.clear();
-
+        phoneTextBox.clear();
     }
 
     public void pressBackButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/customerView.fxml");
-
     }
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            countryComboBox.setItems(CustomerDB.getAllCountries());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
 
         // Listener for combo box change
         countryComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {

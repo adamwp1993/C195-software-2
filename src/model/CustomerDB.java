@@ -11,6 +11,57 @@ import java.time.format.DateTimeFormatter;
 
 public class CustomerDB {
 
+    public static Boolean updateCustomer( String division, String name, String address,
+                                         String postalCode, String phoneNum, Integer customerID) throws SQLException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("UPDATE customers "
+                + "SET Customer_Name=?, Address=?, Postal_Code=?, Phone=?, Last_Update=?," +
+                " Last_Updated_By=?, Division_ID=? WHERE Customer_ID = ?");
+
+        sqlCommand.setString(1, name);
+        sqlCommand.setString(2, address);
+        sqlCommand.setString(3, postalCode);
+        sqlCommand.setString(4, phoneNum);
+        sqlCommand.setString(5, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+        sqlCommand.setString(6, LogonSession.getLoggedOnUser().getUserName());
+        sqlCommand.setInt(7, CustomerDB.getSpecificDivisionID(division));
+        sqlCommand.setInt(8, customerID);
+
+        // Execute query
+        try {
+            sqlCommand.executeUpdate();
+            sqlCommand.close();
+            return true;
+        }
+        catch (SQLException e) {
+            //TODO- log error
+            e.printStackTrace();
+            sqlCommand.close();
+            return false;
+        }
+
+    }
+
+    public static Boolean deleteCustomer(Integer customerID) throws SQLException {
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("DELETE FROM customers " +
+                "WHERE Customer_ID = ?");
+
+        sqlCommand.setInt(1, customerID);
+
+        try {
+            sqlCommand.executeUpdate();
+            sqlCommand.close();
+            return true;
+        }
+        catch (SQLException e) {
+            //TODO- log error
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static Boolean addCustomer(String country, String division, String name, String address, String postalCode,
                                       String phoneNum, Integer divisionID) throws SQLException {
 

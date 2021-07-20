@@ -8,60 +8,59 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="357.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.AddCustomerEN">
+<AnchorPane prefHeight="400.0" prefWidth="357.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.editCustomerController">
    <children>
       <VBox layoutX="32.0" layoutY="14.0" prefHeight="274.0" prefWidth="284.0">
          <children>
             <HBox prefHeight="38.0" prefWidth="284.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="71.0" text="Customer ID:" />
-                  <TextField prefHeight="25.0" prefWidth="197.0" />
+                  <TextField fx:id="customerIDTextBox" disable="true" editable="false" prefHeight="25.0" prefWidth="197.0" />
                </children>
             </HBox>
             <HBox prefHeight="38.0" prefWidth="284.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="71.0" text="Country:" />
-                  <ComboBox prefHeight="25.0" prefWidth="196.0" />
+                  <ComboBox fx:id="countryComboBox" prefHeight="25.0" prefWidth="196.0" />
                </children>
             </HBox>
             <HBox prefHeight="38.0" prefWidth="284.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="71.0" text="Division" />
-                  <ComboBox prefHeight="25.0" prefWidth="196.0" />
+                  <ComboBox fx:id="divisionComboBox" prefHeight="25.0" prefWidth="196.0" />
                </children>
             </HBox>
             <HBox prefHeight="38.0" prefWidth="284.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="71.0" text="Name:" />
-                  <TextField prefHeight="25.0" prefWidth="197.0" />
+                  <TextField fx:id="nameTextBox" prefHeight="25.0" prefWidth="197.0" />
                </children>
             </HBox>
             <HBox prefHeight="38.0" prefWidth="284.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="71.0" text="Address:" />
-                  <TextField prefHeight="25.0" prefWidth="197.0" />
+                  <TextField fx:id="addressTextBox" prefHeight="25.0" prefWidth="197.0" />
                </children>
             </HBox>
             <HBox prefHeight="38.0" prefWidth="284.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="71.0" text="Postal Code:" />
-                  <TextField prefHeight="25.0" prefWidth="197.0" />
+                  <TextField fx:id="postalCodeTextBox" prefHeight="25.0" prefWidth="197.0" />
                </children>
             </HBox>
             <HBox prefHeight="38.0" prefWidth="284.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="71.0" text="Phone:" />
-                  <TextField prefHeight="25.0" prefWidth="197.0" />
+                  <TextField fx:id="phoneTextBox" prefHeight="25.0" prefWidth="197.0" />
                </children>
             </HBox>
          </children>
       </VBox>
       <HBox alignment="CENTER" layoutX="14.0" layoutY="288.0" prefHeight="46.0" prefWidth="318.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Save " />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Clear" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Back" />
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#pressSaveButton" prefHeight="25.0" prefWidth="70.0" text="Save " />
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#pressClearButton" prefHeight="25.0" prefWidth="70.0" text="Clear" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#pressBackButton" prefHeight="25.0" prefWidth="70.0" text="Back" />
          </children>
       </HBox>
    </children>

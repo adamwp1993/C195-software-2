@@ -8,18 +8,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
+import model.AppointmentDB;
 import model.Customer;
 import model.CustomerDB;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class customerViewController implements Initializable {
@@ -75,13 +75,83 @@ public class customerViewController implements Initializable {
 
     }
 
-    public void pressEditButton(ActionEvent event) {
+    public void pressEditButton(ActionEvent event) throws IOException, SQLException {
+
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+        // throw error if no selection
+        if (selectedCustomer == null) {
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert alert = new Alert(Alert.AlertType.WARNING, "No selected Customer", clickOkay);
+            alert.showAndWait();
+            return;
+
+        }
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view_controller/editCustomer.fxml"));
+        Parent parent = loader.load();
+        Scene scene = new Scene(parent);
+        // get the controller and load our selected appointment into it
+        editCustomerController controller = loader.getController();
+        controller.initData(selectedCustomer);
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        window.setScene(scene);
 
     }
 
 
-    public void pressDeleteButton(ActionEvent event) {
+    public void pressDeleteButton(ActionEvent event) throws IOException, SQLException {
 
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+
+        // check that user selected an appointment in the table
+        if (selectedCustomer == null) {
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert alert = new Alert(Alert.AlertType.WARNING, "No selected Customer", clickOkay);
+            alert.showAndWait();
+            return;
+        }
+        else {
+            // show alert and ensure user wants to delete
+            ButtonType clickYes = ButtonType.YES;
+            ButtonType clickNo = ButtonType.NO;
+            Alert deleteAlert = new Alert(Alert.AlertType.WARNING, "Are you sure you want to delete Customer: "
+                    + selectedCustomer.getCustomerID() + " ?", clickYes, clickNo);
+            Optional<ButtonType> result = deleteAlert.showAndWait();
+
+            // if user confirms, delete appointment
+            if (result.get() == ButtonType.YES) {
+                Boolean success = CustomerDB.deleteCustomer(selectedCustomer.getCustomerID());
+
+                // if successful notify, if not show user error.
+                if (success) {
+                    ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                    Alert deletedCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Appointment deleted", clickOkay);
+                    deletedCustomer.showAndWait();
+
+                }
+                else {
+                    //TODO - log error if it occurs
+                    ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+                    Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Failed to delete Appointment", clickOkay);
+                    deleteAppt.showAndWait();
+
+                }
+
+                // Re-load appointments on screen
+                try {
+                    populateCustomers(CustomerDB.getAllCustomers());
+                }
+                catch (SQLException error){
+                    //TODO - log error
+                    error.printStackTrace();
+                }
+
+            }
+            else {
+                return;
+            }
+        }
     }
 
     public void pressBackButton(ActionEvent event) throws IOException {

@@ -28,7 +28,7 @@ public class Customer {
 
 
     // Getters
-    public int getCustomerID() {
+    public Integer getCustomerID() {
         return ID;
     }
 
