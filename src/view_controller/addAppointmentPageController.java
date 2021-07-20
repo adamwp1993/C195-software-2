@@ -67,7 +67,7 @@ public class addAppointmentPageController implements Initializable {
     }
 
 
-    public void pressSaveButton(ActionEvent event) throws SQLException {
+    public void pressSaveButton(ActionEvent event) throws SQLException, IOException {
 
 
         Boolean validStartDateTime = true;
@@ -172,15 +172,14 @@ public class addAppointmentPageController implements Initializable {
             // notify user we successfully added to DB, or if there was an error.
             if (success) {
                 ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-                Alert invalidInput = new Alert(Alert.AlertType.CONFIRMATION, "Appointment added successfully!", clickOkay);
-                invalidInput.showAndWait();
-                pressClearButton();
-                return;
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Appointment added successfully!", clickOkay);
+                alert.showAndWait();
+                switchScreen(event, "/view_controller/appointmentView.fxml");
             }
             else {
                 ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-                Alert invalidInput = new Alert(Alert.AlertType.WARNING, "failed to add appointment", clickOkay);
-                invalidInput.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.WARNING, "failed to add appointment", clickOkay);
+                alert.showAndWait();
             }
 
         }
@@ -240,7 +239,6 @@ public class addAppointmentPageController implements Initializable {
 
     public Boolean validateCustomerOverlap(Integer inputCustomerID, LocalDateTime startDateTime,
                                            LocalDateTime endDateTime, LocalDate apptDate) throws SQLException {
-        //TODO - test this
 
         // Get list of appointments that might have conflicts
         ObservableList<Appointment> possibleConflicts = AppointmentDB.getCustomerFilteredAppointments(apptDate,

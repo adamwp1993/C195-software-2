@@ -116,24 +116,28 @@ public class customerViewController implements Initializable {
             ButtonType clickYes = ButtonType.YES;
             ButtonType clickNo = ButtonType.NO;
             Alert deleteAlert = new Alert(Alert.AlertType.WARNING, "Are you sure you want to delete Customer: "
-                    + selectedCustomer.getCustomerID() + " ?", clickYes, clickNo);
+                    + selectedCustomer.getCustomerID() + " and all related appointments?", clickYes, clickNo);
             Optional<ButtonType> result = deleteAlert.showAndWait();
 
-            // if user confirms, delete appointment
+            // if user confirms, delete appointment + related appointments due to FK contraints
             if (result.get() == ButtonType.YES) {
-                Boolean success = CustomerDB.deleteCustomer(selectedCustomer.getCustomerID());
+                Boolean customerApptSuccess = AppointmentDB.deleteCustomersAppointments(selectedCustomer.getCustomerID());
+                Boolean customerSuccess = CustomerDB.deleteCustomer(selectedCustomer.getCustomerID());
+
 
                 // if successful notify, if not show user error.
-                if (success) {
+                if (customerSuccess && customerApptSuccess) {
                     ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-                    Alert deletedCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Appointment deleted", clickOkay);
+                    Alert deletedCustomer = new Alert(Alert.AlertType.CONFIRMATION,
+                            "Customer + related appointments deleted", clickOkay);
                     deletedCustomer.showAndWait();
 
                 }
                 else {
                     //TODO - log error if it occurs
                     ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-                    Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Failed to delete Appointment", clickOkay);
+                    Alert deleteAppt = new Alert(Alert.AlertType.WARNING,
+                            "Failed to delete Customer or related appointments ", clickOkay);
                     deleteAppt.showAndWait();
 
                 }

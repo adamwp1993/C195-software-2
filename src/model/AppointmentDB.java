@@ -219,6 +219,27 @@ public class AppointmentDB {
 
     }
 
+    public static Boolean deleteCustomersAppointments(Integer customerID) throws SQLException {
+
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("DELETE FROM appointments " +
+                "WHERE Customer_ID = ?");
+
+        sqlCommand.setInt(1, customerID);
+
+        try {
+            sqlCommand.executeUpdate();
+            sqlCommand.close();
+            return true;
+        }
+        catch (SQLException e) {
+            //TODO- log error
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
 
         // Prepare SQL and execute query
