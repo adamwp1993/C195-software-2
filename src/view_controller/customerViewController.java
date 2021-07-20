@@ -70,7 +70,8 @@ public class customerViewController implements Initializable {
     }
 
 
-    public void pressAddButton(ActionEvent event) {
+    public void pressAddButton(ActionEvent event) throws IOException {
+        switchScreen(event, "/view_controller/addCustomer.fxml");
 
     }
 

@@ -8,6 +8,15 @@ import java.sql.*;
 
 public class CustomerDB {
 
+    public static Boolean addCustomer(String country, String division, String name, String address, String postalCode,
+                                      String phoneNum) throws SQLException {
+
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone,");
+        //TODO - start here 
+
+    }
+
     public static ObservableList<Integer> getAllCustomerID() throws SQLException {
 
         ObservableList<Integer> allCustomerID = FXCollections.observableArrayList();
@@ -22,6 +31,25 @@ public class CustomerDB {
         return allCustomerID;
     }
 
+    public static ObservableList<String> getFilteredDivisions(String inputCountry) throws SQLException {
+
+        ObservableList<String> filteredDivs = FXCollections.observableArrayList();
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "SELECT c.Country, c.Country_ID,  d.Division_ID, d.Division FROM countries as c RIGHT OUTER JOIN " +
+                        "first_level_divisions AS d ON c.Country_ID = d.Country_ID WHERE c.Country = ?");
+
+        sqlCommand.setString(1, inputCountry);
+        ResultSet results = sqlCommand.executeQuery();
+
+        while (results.next()) {
+            filteredDivs.add(results.getString("Division"));
+        }
+
+        sqlCommand.close();
+        return filteredDivs;
+
+    }
+
     public static ObservableList<String> getAllCountries() throws SQLException {
 
         ObservableList<String> allCountries = FXCollections.observableArrayList();
@@ -33,6 +61,7 @@ public class CustomerDB {
         }
         sqlCommand.close();
         return allCountries;
+
     }
 
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
