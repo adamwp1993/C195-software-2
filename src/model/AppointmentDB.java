@@ -147,6 +147,7 @@ public class AppointmentDB {
         catch (SQLException e) {
             //TODO- log error
             e.printStackTrace();
+            sqlCommand.close();
             return false;
         }
 

@@ -50,7 +50,7 @@ public class addCustomerController implements Initializable {
         window.show();
     }
 
-    public void pressSaveButton(ActionEvent event) {
+    public void pressSaveButton(ActionEvent event) throws SQLException {
         // INPUT VALIDATION - check for nulls
         String country = countryComboBox.getValue();
         String division = divisionComboBox.getValue();
@@ -69,8 +69,24 @@ public class addCustomerController implements Initializable {
             return;
 
         }
+
+        // Add customer to DB
+        Boolean success = CustomerDB.addCustomer(country, division, name, address, postalCode, phone,
+                CustomerDB.getSpecificDivisionID(division));
+
+        // notify user we successfully added to DB, or if there was an error.
+        if (success) {
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Customer added successfully!", clickOkay);
+            alert.showAndWait();
+            pressClearButton(event);
+            return;
+        }
         else {
-            // TODO - insert
+            ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Failed to add Customer", clickOkay);
+            alert.showAndWait();
+            return;
         }
 
     }

@@ -5,15 +5,62 @@ import javafx.collections.ObservableList;
 import utility.SqlDatabase;
 
 import java.sql.*;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CustomerDB {
 
     public static Boolean addCustomer(String country, String division, String name, String address, String postalCode,
-                                      String phoneNum) throws SQLException {
+                                      String phoneNum, Integer divisionID) throws SQLException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
-                "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone,");
-        //TODO - start here 
+                "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, " +
+                        "Last_Update, Last_Updated_By, Division_ID) \n" +
+                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+        sqlCommand.setString(1, name);
+        sqlCommand.setString(2, address);
+        sqlCommand.setString(3, postalCode);
+        sqlCommand.setString(4, phoneNum);
+        sqlCommand.setString(5, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+        sqlCommand.setString(6, LogonSession.getLoggedOnUser().getUserName());
+        sqlCommand.setString(7, ZonedDateTime.now(ZoneOffset.UTC).format(formatter).toString());
+        sqlCommand.setString(8, LogonSession.getLoggedOnUser().getUserName());
+        sqlCommand.setInt(9, divisionID);
+
+        // Execute query
+        try {
+            sqlCommand.executeUpdate();
+            sqlCommand.close();
+            return true;
+        }
+        catch (SQLException e) {
+            //TODO- log error
+            e.printStackTrace();
+            sqlCommand.close();
+            return false;
+        }
+
+    }
+
+    public static Integer getSpecificDivisionID(String division) throws SQLException {
+        Integer divID = 0;
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT Division, Division_ID FROM " +
+                "first_level_divisions WHERE Division = ?");
+
+        sqlCommand.setString(1, division);
+
+        ResultSet result = sqlCommand.executeQuery();
+
+        while ( result.next() ) {
+            divID = result.getInt("Division_ID");
+        }
+
+        sqlCommand.close();
+        return divID;
 
     }
 
@@ -82,10 +129,12 @@ public class CustomerDB {
             String custPostalCode = results.getString("Postal_Code");
             String custPhoneNum = results.getString("Phone");
             String custDivision = results.getString("Division");
+            Integer divID = results.getInt("Division_ID");
             String custCountry = results.getString("Country");
 
             // populate into an customer object
-            Customer newCust = new Customer(custID, custName, custAddress, custPostalCode, custPhoneNum, custDivision, custCountry);
+            Customer newCust = new Customer(custID, custName, custAddress, custPostalCode, custPhoneNum, custDivision,
+                    divID, custCountry);
 
 
             // Add to the observablelist
