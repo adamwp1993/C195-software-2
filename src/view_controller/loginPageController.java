@@ -14,6 +14,8 @@ import java.util.*;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
+import utility.Logger;
+
 import java.net.URL;
 
 
@@ -54,8 +56,17 @@ public class loginPageController implements Initializable {
     }
 
     public void pressLogonButton(ActionEvent event) throws IOException, SQLException {
-        boolean logon = LogonSession.attemptLogon(userTextBox.getText(), passwordTextBox.getText());
+        String userName = userTextBox.getText();
+        String password = passwordTextBox.getText();
+
+        // Attempt Login
+        boolean logon = LogonSession.attemptLogon(userName, password);
+
+        // Log Login attempt
+        Logger.auditLogin(userName, logon);
+
         if (logon) {
+
 
             // Get appointments in 15 minutes and display notification if there is.
             ObservableList<Appointment> upcomingAppts = model.AppointmentDB.getAppointmentsIn15Mins();
