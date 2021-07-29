@@ -10,15 +10,41 @@ import java.sql.SQLException;
 
 public class ContactDB {
 
-    //TODO - start here 
-    /*
-    public static ObservableList<String> getContactAppts(String contactID) {
+
+    public static ObservableList<String> getContactAppts(String contactID) throws SQLException {
         ObservableList<String> apptStr = FXCollections.observableArrayList();
-        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT * FROM appointments WHERE Contact_ID")
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "SELECT * FROM appointments WHERE Contact_ID = ?");
+
+        sqlCommand.setString(1, contactID);
+
+        ResultSet results = sqlCommand.executeQuery();
+
+        while ( results.next()) {
+            String apptID = results.getString("Appointment_ID");
+            String title = results.getString("Title");
+            String type = results.getString("Type");
+            String start = results.getString("Start");
+            String end = results.getString("End");
+            String customerID = results.getString("Customer_ID");
+
+            String newLine = "  AppointmentID: " + apptID + "\n";
+            newLine += "        Title: " + title + "\n";
+            newLine += "        Type: " + type + "\n";
+            newLine += "        Start date/time: " + start + " UTC\n";
+            newLine += "        End date/time: " + end + " UTC\n";
+            newLine += "        CustomerID: " + customerID + "\n";
+
+            apptStr.add(newLine);
+
+        }
+
+        sqlCommand.close();
+        return apptStr;
 
     }
 
-     */
+
 
     public static ObservableList<String> getAllContactName() throws SQLException {
         ObservableList<String> allContactName = FXCollections.observableArrayList();

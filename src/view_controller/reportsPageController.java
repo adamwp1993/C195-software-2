@@ -59,12 +59,25 @@ public class reportsPageController implements Initializable {
 
     }
 
+    public void pressMinsPerContact(ActionEvent event ) {
+        System.out.println("under construction");
+    }
+
     public void pressContactSchedule(ActionEvent event) throws SQLException {
+
         ObservableList<String> contacts = ContactDB.getAllContactName();
+
         for (String contact : contacts) {
             String contactID = ContactDB.findContactID(contact).toString();
-            reportTextField.appendText("Contact Name: " + contact + " ID: " + contactID);
+            reportTextField.appendText("Contact Name: " + contact + " ID: " + contactID + "\n");
 
+            ObservableList<String> appts = ContactDB.getContactAppts(contactID);
+            if(appts.isEmpty()) {
+                reportTextField.appendText("    No appointments for contact \n");
+            }
+            for (String appt : appts) {
+                reportTextField.appendText(appt);
+            }
 
         }
     }
