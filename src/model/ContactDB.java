@@ -10,6 +10,16 @@ import java.sql.SQLException;
 
 public class ContactDB {
 
+    //TODO - start here 
+    /*
+    public static ObservableList<String> getContactAppts(String contactID) {
+        ObservableList<String> apptStr = FXCollections.observableArrayList();
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT * FROM appointments WHERE Contact_ID")
+
+    }
+
+     */
+
     public static ObservableList<String> getAllContactName() throws SQLException {
         ObservableList<String> allContactName = FXCollections.observableArrayList();
         PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT DISTINCT Contact_Name" +

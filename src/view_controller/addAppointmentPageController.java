@@ -300,7 +300,6 @@ public class addAppointmentPageController implements Initializable {
             userComboBox.setItems(UserDB.getAllUserID());
             contactComboBox.setItems(ContactDB.getAllContactName());
         } catch (SQLException throwables) {
-            //TODO - log possible errors
             throwables.printStackTrace();
         }
 

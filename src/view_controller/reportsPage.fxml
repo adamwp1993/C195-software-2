@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view_controller.reportsPageController">
+   <children>
+      <HBox layoutX="14.0" layoutY="335.0" prefHeight="50.0" prefWidth="477.0">
+         <children>
+            <Button fx:id="ApptByReportButton" mnemonicParsing="false" onAction="#pressApptByReportButton" prefHeight="50.0" prefWidth="136.0" text="Customer Appointments by type and month " textOverrun="CLIP" wrapText="true">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+            <Button fx:id="contactScheduleReportButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="136.0" text="Contact Schedule " textOverrun="CLIP" wrapText="true">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+            <Button fx:id="minsPerContactButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="136.0" text="Minutes scheduled per Contact " textOverrun="CLIP" wrapText="true">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+            <ComboBox fx:id="contactFilterComboBox" prefHeight="50.0" prefWidth="103.0" />
+         </children>
+      </HBox>
+      <Button fx:id="backButton" layoutX="514.0" layoutY="335.0" mnemonicParsing="false" onAction="#pressBackButton" prefHeight="26.0" prefWidth="71.0" text="Back" />
+      <TextArea fx:id="reportTextField" editable="false" layoutX="23.0" layoutY="31.0" prefHeight="288.0" prefWidth="468.0" wrapText="true" />
+   </children>
+</AnchorPane>

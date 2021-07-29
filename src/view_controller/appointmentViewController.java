@@ -16,6 +16,7 @@ import model.AppointmentDB;
 import model.LogonSession;
 import utility.SqlDatabase;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -402,6 +403,11 @@ public class appointmentViewController implements Initializable {
     public void pressCustomerButton(ActionEvent event) throws IOException {
 
         switchScreen(event, "/view_controller/customerView.fxml");
+
+    }
+
+    public void pressReportsPage(ActionEvent event) throws IOException {
+        switchScreen(event, "/view_controller/reportsPage.fxml");
 
     }
 

@@ -46,6 +46,6 @@
       <Button fx:id="customersViewButton" layoutX="504.0" layoutY="462.0" mnemonicParsing="false" onAction="#pressCustomerButton" prefHeight="26.0" prefWidth="74.0" text="Customers" />
       <Button fx:id="logOutButton" layoutX="698.0" layoutY="462.0" mnemonicParsing="false" onAction="#pressLogoutButton" prefHeight="26.0" prefWidth="74.0" text="Log out" />
       <Button fx:id="deleteButton" layoutX="698.0" layoutY="420.0" mnemonicParsing="false" onAction="#pressDeleteButton" prefHeight="26.0" prefWidth="74.0" text="Delete" />
-      <Button fx:id="reportsButton" layoutX="599.0" layoutY="462.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Reports" />
+      <Button fx:id="reportsButton" layoutX="599.0" layoutY="462.0" mnemonicParsing="false" onAction="#pressReportsPage" prefHeight="26.0" prefWidth="74.0" text="Reports" />
    </children>
 </AnchorPane>

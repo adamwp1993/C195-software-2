@@ -65,6 +65,42 @@ public class AppointmentDB {
 
     }
 
+    public static ObservableList<String> reportTotalsByTypeAndMonth() throws SQLException {
+        ObservableList<String> reportStrings = FXCollections.observableArrayList();
+
+        reportStrings.add("Total Number of Appointments by type and month:\n");
+
+        // Prepare SQL
+        PreparedStatement typeSqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "SELECT Type, COUNT(Type) as \"Total\" FROM appointments GROUP BY Type");
+
+        PreparedStatement monthSqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "SELECT MONTHNAME(Start) as \"Month\", COUNT(MONTH(Start)) as \"Total\" from appointments GROUP BY Month");
+
+        ResultSet typeResults = typeSqlCommand.executeQuery();
+        ResultSet monthResults = monthSqlCommand.executeQuery();
+
+        while (typeResults.next()) {
+            String typeStr = "Type: " + typeResults.getString("Type") + " Count: " +
+                    typeResults.getString("Total") + "\n";
+            reportStrings.add(typeStr);
+
+        }
+
+        while (monthResults.next()) {
+            String monthStr = "Month: " + monthResults.getString("Month") + " Count: " +
+                    monthResults.getString("Total") + "\n";
+            reportStrings.add(monthStr);
+
+        }
+
+        monthSqlCommand.close();
+        typeSqlCommand.close();
+
+        return reportStrings;
+
+    }
+
     public static ObservableList<Appointment> getCustomerFilteredAppointments(
             LocalDate apptDate, Integer inputCustomerID) throws SQLException {
         // Prepare SQL statement
