@@ -7,8 +7,31 @@ import utility.SqlDatabase;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class ContactDB {
+
+    public static Integer getMinutesScheduled(String contactID) throws SQLException {
+
+        Integer totalMins = 0;
+        PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
+                "SELECT * FROM appointments WHERE Contact_ID = ?");
+
+        sqlCommand.setString(1, contactID);
+
+        ResultSet results = sqlCommand.executeQuery();
+
+        while ( results.next() ) {
+            LocalDateTime startDateTime = results.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime endDateTime = results.getTimestamp("End").toLocalDateTime();
+            totalMins += (int)Duration.between(startDateTime, endDateTime).toMinutes();
+        }
+
+        sqlCommand.close();
+        return totalMins;
+    }
 
 
     public static ObservableList<String> getContactAppts(String contactID) throws SQLException {

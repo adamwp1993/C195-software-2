@@ -59,8 +59,14 @@ public class reportsPageController implements Initializable {
 
     }
 
-    public void pressMinsPerContact(ActionEvent event ) {
-        System.out.println("under construction");
+    public void pressMinsPerContact(ActionEvent event ) throws SQLException {
+        ObservableList<String> contacts = ContactDB.getAllContactName();
+
+        for (String contact: contacts) {
+            String contactID = ContactDB.findContactID(contact).toString();
+            reportTextField.appendText("Contact Name: " + contact + " ID: " + contactID + "\n");
+            reportTextField.appendText("    Total Mins scheduled: " + ContactDB.getMinutesScheduled(contactID) + "\n");
+        }
     }
 
     public void pressContactSchedule(ActionEvent event) throws SQLException {
