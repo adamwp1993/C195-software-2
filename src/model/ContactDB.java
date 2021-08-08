@@ -11,8 +11,21 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+/**
+ * ContactDB
+ *
+ * @author Adam Petersen
+ */
 public class ContactDB {
 
+    /**
+     * getMinutesScheduled
+     * Calculates sum of minutes for all appointments for a specific contact
+     *
+     * @param contactID ID of contact to find sum for
+     * @return Total number of minutes scheduled
+     * @throws SQLException
+     */
     public static Integer getMinutesScheduled(String contactID) throws SQLException {
 
         Integer totalMins = 0;
@@ -33,7 +46,14 @@ public class ContactDB {
         return totalMins;
     }
 
-
+    /**
+     * getContactAppts
+     * Gets all appointments for a specific contact
+     *
+     * @param contactID ID of contact fo find appts for
+     * @return List of appointments for contact
+     * @throws SQLException
+     */
     public static ObservableList<String> getContactAppts(String contactID) throws SQLException {
         ObservableList<String> apptStr = FXCollections.observableArrayList();
         PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement(
@@ -67,8 +87,13 @@ public class ContactDB {
 
     }
 
-
-
+    /**
+     * getAllContactName
+     * gets the name of all contacts
+     *
+     * @return list of all contact names
+     * @throws SQLException
+     */
     public static ObservableList<String> getAllContactName() throws SQLException {
         ObservableList<String> allContactName = FXCollections.observableArrayList();
         PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT DISTINCT Contact_Name" +
@@ -82,6 +107,14 @@ public class ContactDB {
         return allContactName;
     }
 
+    /**
+     * findContactID
+     * takes the name of the contact and finds the ID for use with other DB operations.
+     *
+     * @param contactName name of contact we are searching ID for
+     * @return Corresponding Contact ID
+     * @throws SQLException
+     */
     public static Integer findContactID(String contactName) throws SQLException {
         // take user selected name and find the FK so we can add to appointments table.
         Integer contactID = -1;

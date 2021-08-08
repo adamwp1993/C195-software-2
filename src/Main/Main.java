@@ -17,7 +17,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
+/**
+ * The Main class of the application.
+ *
+ * @author Adam Petersen
+ */
 public class Main extends Application{
+
+    /**
+     *
+     * Loads the Stage to display on screen.
+     *
+     * @param loginStage the path to the screen we will be loading.
+      */
 
     @Override
     public void start(Stage loginStage) throws Exception {
@@ -27,7 +39,15 @@ public class Main extends Application{
         loginStage.show();
     }
 
-
+    /**
+     *
+     * Starting point of the application.
+     * Loads the properties which stores the Database Credentials and opens a connection to the DB.
+     *
+     * @param args Command line arguments passed to the application.
+     *
+     * @throws SQLException If we fail to connect to the Database.
+     */
     public static void main(String[] args) throws SQLException {
         // Retrieve Database credentials from properties file.
         Properties prop = new Properties();

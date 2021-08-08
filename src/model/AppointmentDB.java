@@ -12,9 +12,22 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+/**
+ * AppointmentDB
+ *
+ * @author Adam Petersen
+ */
 public class AppointmentDB {
 
+    /**
+     * GetDateFilteredAppointments
+     * Queries DB for all appointments between a start and end range
+     *
+     * @param startRange start of range ZonedDateTime
+     * @param endRange end of range ZonedDateTime
+     * @return Filtered list of appointments based on an input start and end date.
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getDateFilteredAppointments(ZonedDateTime startRange, ZonedDateTime endRange)
             throws SQLException {
         
@@ -65,6 +78,13 @@ public class AppointmentDB {
 
     }
 
+    /**
+     * reportTotalsByTypeAndMonth
+     * Queries DB and calculates sum of appointments by type and by month for use in reports page.
+     *
+     * @return List of strings to populate in the report.
+     * @throws SQLException
+     */
     public static ObservableList<String> reportTotalsByTypeAndMonth() throws SQLException {
         ObservableList<String> reportStrings = FXCollections.observableArrayList();
 
@@ -101,6 +121,15 @@ public class AppointmentDB {
 
     }
 
+    /**
+     * getCustomerFilteredAppointments
+     * queries DB for all appointments for a specific customer on a specific date. used to find conflicts
+     *
+     * @param apptDate date we are seeing for any possible appointments
+     * @param inputCustomerID customer ID we are checking for
+     * @return List of appointments for a specific customer on the input apptDate
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getCustomerFilteredAppointments(
             LocalDate apptDate, Integer inputCustomerID) throws SQLException {
         // Prepare SQL statement
@@ -147,7 +176,24 @@ public class AppointmentDB {
 
     }
 
-
+    /**
+     * updateAppointment
+     * takes the specific Appointment ID and updates it in the DB
+     *
+     * @param inputApptID Appointment ID
+     * @param inputTitle Title of the appointment
+     * @param inputDescription Description of appointment
+     * @param inputLocation Location of appointment
+     * @param inputType Type of appointment
+     * @param inputStart Start of appointment
+     * @param inputEnd end of appointment
+     * @param inputLastUpdateBy date/time of update
+     * @param inputCustomerID Customer ID
+     * @param inputUserID User ID
+     * @param inputContactID Contact ID
+     * @return Boolean indicating if operation was successful
+     * @throws SQLException
+     */
     public static Boolean updateAppointment(Integer inputApptID, String inputTitle, String inputDescription,
                                             String inputLocation, String inputType, ZonedDateTime inputStart,
                                             ZonedDateTime inputEnd, String inputLastUpdateBy, Integer inputCustomerID,
@@ -189,6 +235,24 @@ public class AppointmentDB {
 
     }
 
+    /**
+     * addAppointment
+     * Takes values and creates a new appointment in the database
+     *
+     * @param inputTitle title of appointment
+     * @param inputDescription description of appointment
+     * @param inputLocation location of appointment
+     * @param inputType type of appointment
+     * @param inputStart start of appointment
+     * @param inputEnd end of appointment
+     * @param inputCreatedBy who created appointment
+     * @param inputLastUpdateBy who updated appointment last
+     * @param inputCustomerID customer ID
+     * @param inputUserID user ID
+     * @param inputContactID contact ID
+     * @return Boolean indicating if operation was successful
+     * @throws SQLException
+     */
     public static Boolean addAppointment(String inputTitle, String inputDescription,
                                       String inputLocation, String inputType, ZonedDateTime inputStart,
                                       ZonedDateTime inputEnd, String inputCreatedBy,
@@ -232,9 +296,15 @@ public class AppointmentDB {
             return false;
         }
 
-
     }
 
+    /**
+     * deleteAppointment
+     *
+     * @param inputApptID ID of appointment to be deleted
+     * @return Boolean indicating if operation was successful
+     * @throws SQLException
+     */
     public static Boolean deleteAppointment(Integer inputApptID) throws SQLException {
 
             PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("DELETE FROM appointments " +
@@ -255,6 +325,14 @@ public class AppointmentDB {
 
     }
 
+    /**
+     * deleteCustomersAppointments
+     * delete all appointments for a customer, to maintain referential integrity when we delete a customer
+     *
+     * @param customerID ID of customer to delete appointments for
+     * @return Boolean indicating if operation was successful
+     * @throws SQLException
+     */
     public static Boolean deleteCustomersAppointments(Integer customerID) throws SQLException {
 
         PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("DELETE FROM appointments " +
@@ -275,7 +353,13 @@ public class AppointmentDB {
 
     }
 
-
+    /**
+     * getAllAppointments
+     * queries database for all appointments
+     *
+     * @return List of all appointments
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
 
         // Prepare SQL and execute query
@@ -318,6 +402,13 @@ public class AppointmentDB {
 
     }
 
+    /**
+     * getAppointmentsIn15Mins
+     * Queries DB to find appointments for logged in user starting within 15 minutes.
+     *
+     * @return list of appointments for user that start in 15 mins.
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAppointmentsIn15Mins() throws SQLException{
 
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();

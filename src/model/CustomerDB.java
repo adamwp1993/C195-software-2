@@ -9,6 +9,11 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * CustomerDB
+ *
+ * @author Adam Petersen
+ */
 public class CustomerDB {
 
     public static Boolean updateCustomer( String division, String name, String address,
