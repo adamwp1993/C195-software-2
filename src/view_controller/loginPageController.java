@@ -55,6 +55,7 @@ public class loginPageController implements Initializable {
 
     }
 
+
     public void pressLogonButton(ActionEvent event) throws IOException, SQLException {
         String userName = userTextBox.getText();
         String password = passwordTextBox.getText();
@@ -129,6 +130,8 @@ public class loginPageController implements Initializable {
         loginButton.setText(resources.getString("loginButton"));
         clearButton.setText(resources.getString("clearButton"));
         exitButton.setText(resources.getString("exitButton"));
+
+
 
 
     }

@@ -116,7 +116,7 @@ public class addCustomerController implements Initializable {
             throwables.printStackTrace();
         }
 
-        // Listener for combo box change
+        //Lambda Expression - Listener for combo box change
         countryComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) {
                 divisionComboBox.getItems().clear();

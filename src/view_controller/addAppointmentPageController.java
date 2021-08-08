@@ -282,7 +282,7 @@ public class addAppointmentPageController implements Initializable {
 
         timeZoneLabel.setText("Your Time Zone:" + LogonSession.getUserTimeZone());
 
-        // Disable users from picking dates in the past or weekend.
+        //Lambda Expression - Disable users from picking dates in the past or weekend.
 
         apptDatePicker.setDayCellFactory(picker -> new DateCell() {
             @Override

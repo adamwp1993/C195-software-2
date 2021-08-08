@@ -97,8 +97,6 @@ public class appointmentViewController implements Initializable {
         weekFilterButton.setToggleGroup(filterToggle);
         monthFilterButton.setToggleGroup(filterToggle);
 
-
-
     }
 
 
@@ -442,9 +440,11 @@ public class appointmentViewController implements Initializable {
 
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources)   {
+
+
+
 
         noFilterButton.setSelected(true);
         initToggleGroup();

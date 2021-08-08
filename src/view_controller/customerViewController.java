@@ -122,6 +122,7 @@ public class customerViewController implements Initializable {
             // if user confirms, delete appointment + related appointments due to FK contraints
             if (result.get() == ButtonType.YES) {
                 Boolean customerApptSuccess = AppointmentDB.deleteCustomersAppointments(selectedCustomer.getCustomerID());
+                //TODO lambda
                 Boolean customerSuccess = CustomerDB.deleteCustomer(selectedCustomer.getCustomerID());
 
 
