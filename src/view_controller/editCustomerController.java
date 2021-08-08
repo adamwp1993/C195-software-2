@@ -21,6 +21,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * editCustomerController
+ *
+ * @author Adam Petersen
+ */
 public class editCustomerController implements Initializable {
 
     @FXML
@@ -44,6 +49,13 @@ public class editCustomerController implements Initializable {
     @FXML
     Button backButton;
 
+    /**
+     * initData
+     * Takes object from previous stage and populates it on this stage
+     *
+     * @param selectedCustomer Customer object from previous stage
+     * @throws SQLException
+     */
     public void initData(Customer selectedCustomer) throws SQLException {
 
         countryComboBox.setItems(CustomerDB.getAllCountries());
@@ -60,6 +72,14 @@ public class editCustomerController implements Initializable {
 
     }
 
+    /**
+     * switchScreen
+     * loads new stage
+     *
+     * @param event Button Click
+     * @param switchPath path to new stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -68,6 +88,14 @@ public class editCustomerController implements Initializable {
         window.show();
     }
 
+    /**
+     * pressSaveButton
+     * validates input and inputs new object to DB
+     *
+     * @param event Button Click
+     * @throws IOException
+     * @throws SQLException
+     */
     public void pressSaveButton(ActionEvent event) throws IOException, SQLException {
         // INPUT VALIDATION - check for nulls
         String country = countryComboBox.getValue();
@@ -105,6 +133,12 @@ public class editCustomerController implements Initializable {
         }
     }
 
+    /**
+     * pressClearButton
+     * clears fields on screen
+     *
+     * @param event Button Click
+     */
     public void pressClearButton(ActionEvent event) {
         countryComboBox.getSelectionModel().clearSelection();
         divisionComboBox.getSelectionModel().clearSelection();
@@ -114,10 +148,24 @@ public class editCustomerController implements Initializable {
         phoneTextBox.clear();
     }
 
+    /**
+     * pressBackButton
+     * navigates to previous stage
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressBackButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/customerView.fxml");
     }
 
+    /**
+     * initialize
+     * populates stage
+     *
+     * @param url stage path
+     * @param resourceBundle resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

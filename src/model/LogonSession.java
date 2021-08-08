@@ -9,17 +9,33 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * LogonSession
+ *
+ * @author Adam Petersen
+ */
 public class LogonSession {
 
     private static User loggedOnUser;
     private static Locale userLocale;
     private static ZoneId userTimeZone;
 
-
+    /**
+     * LogonSessionConstructor
+     */
     public LogonSession() {}
 
+    /**
+     * attemptLogon
+     * Takes input username and password and checks them against DB to logon
+     *
+     * @param userNameInput user input username
+     * @param userPassword user input password
+     *
+     * @return Boolean indicating a successful logon
+     * @throws SQLException
+     */
     public static boolean attemptLogon(String userNameInput, String userPassword) throws SQLException{
-        //TODO - Add logging here
         Connection conn = SqlDatabase.dbCursor();
         PreparedStatement sqlCommand = conn.prepareStatement("SELECT * FROM users WHERE " +
                 "User_Name = ? AND Password = ?");
@@ -45,20 +61,35 @@ public class LogonSession {
 
     }
 
+    /**
+     * Getter - user Object
+     * @return logged on user object
+     */
     public static User getLoggedOnUser() {
         return loggedOnUser;
     }
 
+    /**
+     * Getter - user Locale
+     * @return locale of logged on user
+     */
     public static Locale getUserLocale() {
         return userLocale;
 
     }
 
+    /**
+     * Getter - user Time Zone
+     * @return logged on user time zone
+     */
     public static ZoneId getUserTimeZone() {
         return userTimeZone;
     }
 
-
+    /**
+     * logOff
+     * Logs off user
+     */
     public static void logOff() {
         loggedOnUser = null;
         userLocale = null;

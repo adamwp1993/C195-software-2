@@ -19,6 +19,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * addCustomerController
+ *
+ * @author Adam Petersen
+ */
 public class addCustomerController implements Initializable {
     @FXML
     TextField customerIDTextBox;
@@ -41,7 +46,14 @@ public class addCustomerController implements Initializable {
     @FXML
     Button backButton;
 
-
+    /**
+     * switchScreen
+     * Loads new stage
+     *
+     * @param event button click
+     * @param switchPath path to new stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -50,6 +62,14 @@ public class addCustomerController implements Initializable {
         window.show();
     }
 
+    /**
+     * pressSaveButton
+     * validates input and saves to DB
+     *
+     * @param event Button click
+     * @throws SQLException
+     * @throws IOException
+     */
     public void pressSaveButton(ActionEvent event) throws SQLException, IOException {
         // INPUT VALIDATION - check for nulls
         String country = countryComboBox.getValue();
@@ -91,6 +111,12 @@ public class addCustomerController implements Initializable {
 
     }
 
+    /**
+     * pressClearButton
+     * clears fields on page
+     *
+     * @param event Button Click
+     */
     public void pressClearButton(ActionEvent event) {
         countryComboBox.getItems().clear();
         divisionComboBox.getItems().clear();
@@ -101,13 +127,27 @@ public class addCustomerController implements Initializable {
 
     }
 
+    /**
+     * pressBackButton
+     * goes back to previous stage
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressBackButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/customerView.fxml");
 
     }
 
 
-
+    /**
+     * initialize
+     * Loads page and sets items on it
+     * Lambda expression - creates a listener for changes in a combo box
+     *
+     * @param url path of stage
+     * @param resourceBundle resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {

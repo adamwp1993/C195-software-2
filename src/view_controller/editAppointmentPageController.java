@@ -22,6 +22,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
+/**
+ * editAppointmentPageController
+ *
+ * @author Adam Petersen
+ */
 public class editAppointmentPageController implements Initializable {
 
     @FXML
@@ -56,7 +61,14 @@ public class editAppointmentPageController implements Initializable {
     Label timeZoneLabel;
 
 
-
+    /**
+     * switchScreen
+     * loads new stage
+     *
+     * @param event Button Click
+     * @param switchPath path to new stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -65,7 +77,13 @@ public class editAppointmentPageController implements Initializable {
         window.show();
     }
 
-
+    /**
+     * initData
+     * takes passed object from previous stage and populates it in this stage
+     *
+     * @param selectedAppt appt from previous stage
+     * @throws SQLException
+     */
     public void initData(Appointment selectedAppt) throws SQLException {
 
 
@@ -109,6 +127,15 @@ public class editAppointmentPageController implements Initializable {
 
     }
 
+    /**
+     * validateBusinessHours
+     * input validation
+     *
+     * @param startDateTime start date time
+     * @param endDateTime end date time
+     * @param apptDate appointment date
+     * @return Boolean for successful operation
+     */
     public Boolean validateBusinessHours(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDate apptDate) {
         // (8am to 10pm EST, Not including weekends)
         // Turn into zonedDateTimeObject, so we can evaluate whatever time was entered in user time zone against EST
@@ -136,7 +163,17 @@ public class editAppointmentPageController implements Initializable {
 
     }
 
-
+    /**
+     * validateCustomerOverlap
+     * input validation
+     *
+     * @param inputCustomerID Customer ID
+     * @param startDateTime Start date time for appointment
+     * @param endDateTime end date time for appointment
+     * @param apptDate appointment date
+     * @return Boolean indicating if input is valid
+     * @throws SQLException
+     */
     public Boolean validateCustomerOverlap(Integer inputCustomerID, LocalDateTime startDateTime,
                                            LocalDateTime endDateTime, LocalDate apptDate) throws SQLException {
 
@@ -178,7 +215,12 @@ public class editAppointmentPageController implements Initializable {
 
     }
 
-
+    /**
+     * pressClearButton
+     * clears fields on screen
+     *
+     * @param event Button Click
+     */
     public void pressClearButton(ActionEvent event) {
         titleTextBox.clear();
         descriptionTextBox.clear();
@@ -193,13 +235,26 @@ public class editAppointmentPageController implements Initializable {
 
     }
 
-
+    /**
+     * pressBackButton
+     * loads previous stage
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressBackButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/appointmentView.fxml");
 
     }
 
-
+    /**
+     * pressSaveButton
+     * saves appointment
+     *
+     * @param event Button Click
+     * @throws SQLException
+     * @throws IOException
+     */
     public void pressSaveButton(ActionEvent event) throws SQLException, IOException {
 
         Boolean validStartDateTime = true;
@@ -276,7 +331,6 @@ public class editAppointmentPageController implements Initializable {
             errorMessage += "Invalid Customer Overlap. Cannot double book customers.\n";
         }
 
-        System.out.println(errorMessage); // TODO - logger
 
         // INPUT VALIDATION - if any requirements are false, show error and end method.
         if (!validOverlap || !validBusinessHours || !validEndDateTime || !validStartDateTime) {
@@ -318,7 +372,13 @@ public class editAppointmentPageController implements Initializable {
 
     }
 
-
+    /**
+     * initialize
+     * initializes stage
+     *
+     * @param url stage path
+     * @param resourceBundle resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

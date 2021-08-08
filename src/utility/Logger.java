@@ -7,10 +7,23 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
+/**
+ * Logger
+ *
+ * @author Adam Petersen
+ */
 public class Logger {
 
     private static final String logPath = "login_activity.txt";
 
+    /**
+     * auditLogon
+     * Log a logon activity in the text file
+     *
+     * @param userName userName of the logged on user
+     * @param successBool Boolean to indicate successful logon
+     * @throws IOException
+     */
     public static void auditLogin(String userName, Boolean successBool) throws IOException {
         try {
 

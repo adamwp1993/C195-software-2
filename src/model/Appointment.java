@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
 /**
- * Appointment class used to represent one appointment in the DB.
+ * Appointment
  *
  * @author Adam Petersen
  */
@@ -72,6 +72,7 @@ public class Appointment {
 
     //
     /**
+     * getter - Appointment ID
      * @return ID of the appointment
      */
     public Integer getAppointmentID() {
@@ -79,6 +80,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - Title
      * @return title of the appointment
      */
     public String getTitle() {
@@ -86,6 +88,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - Description
      * @return description of appointment
      */
     public String getDescription() {
@@ -93,6 +96,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - Location
      * @return location of appointment
      */
     public String getLocation() {
@@ -100,6 +104,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - Type
      * @return type of the appointment
      */
     public String getType() {
@@ -107,6 +112,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - Start Date time
      * @return start datetime of appointment
      */
     public Timestamp getStartDateTime() {
@@ -114,6 +120,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - end date time
      * @return end datetime of appointment
      */
     public Timestamp getEndDateTime() {
@@ -121,6 +128,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - create date time
      * @return create date of appointment
      */
     public Timestamp getCreateDate() {
@@ -128,6 +136,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - created by
      * @return who created appointment
      */
     public String getCreateBy() {
@@ -135,6 +144,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - last update date time
      * @return last update of appointment
      */
     public Timestamp getLastUpdateDateTime() {
@@ -142,6 +152,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - last updated by
      * @return datetime of last update
      */
     public String getLastUpdateBy() {
@@ -149,6 +160,7 @@ public class Appointment {
     }
 
     /**
+     * getter - customer ID
      * @return customer ID
      */
     public Integer getCustomerID() {
@@ -156,6 +168,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - user ID
      * @return user ID
      */
     public Integer getUserID() {
@@ -163,6 +176,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - contact ID
      * @return contact ID
      */
     public Integer getContactID() {
@@ -170,6 +184,7 @@ public class Appointment {
     }
 
     /**
+     * Getter - contact name
      * @return name of contact
      */
     public String getContactName() {

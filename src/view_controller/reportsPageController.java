@@ -23,6 +23,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * reportsPageController
+ *
+ * @author Adam Petersen
+ */
 public class reportsPageController implements Initializable {
 
     @FXML
@@ -36,6 +41,14 @@ public class reportsPageController implements Initializable {
     @FXML
     Button backButton;
 
+    /**
+     * switchScreen
+     * loads new stage
+     *
+     * @param event Button Click
+     * @param switchPath path to new stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -44,11 +57,25 @@ public class reportsPageController implements Initializable {
         window.show();
     }
 
+    /**
+     * pressBackButton
+     * navigates to previous stage
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressBackButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/appointmentView.fxml");
 
     }
 
+    /**
+     * pressApptByReportButton
+     * populates first report
+     *
+     * @param event Button Click
+     * @throws SQLException
+     */
     public void pressApptByReportButton(ActionEvent event) throws SQLException {
 
         ObservableList<String> reportStrings = AppointmentDB.reportTotalsByTypeAndMonth();
@@ -59,6 +86,13 @@ public class reportsPageController implements Initializable {
 
     }
 
+    /**
+     * pressMinsPerContact
+     * populates second report
+     *
+     * @param event Button Click
+     * @throws SQLException
+     */
     public void pressMinsPerContact(ActionEvent event ) throws SQLException {
         ObservableList<String> contacts = ContactDB.getAllContactName();
 
@@ -69,6 +103,13 @@ public class reportsPageController implements Initializable {
         }
     }
 
+    /**
+     * pressContactSchedule
+     * populates 3rd report
+     *
+     * @param event Button Click
+     * @throws SQLException
+     */
     public void pressContactSchedule(ActionEvent event) throws SQLException {
 
         ObservableList<String> contacts = ContactDB.getAllContactName();
@@ -89,7 +130,13 @@ public class reportsPageController implements Initializable {
     }
 
 
-
+    /**
+     * initialize
+     * populates stage
+     *
+     * @param location location / time zone
+     * @param resources resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

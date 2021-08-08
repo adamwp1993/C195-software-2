@@ -47,6 +47,7 @@ public class Customer {
     // Getters
 
     /**
+     * Getter - customer ID
      * @return customer ID
      */
     public Integer getCustomerID() {
@@ -54,6 +55,7 @@ public class Customer {
     }
 
     /**
+     * Getter - name
      * @return name of customer
      */
     public String getName() {
@@ -61,6 +63,7 @@ public class Customer {
     }
 
     /**
+     * Getter - Address
      * @return address of customer
      */
     public String getAddress() {
@@ -68,6 +71,7 @@ public class Customer {
     }
 
     /**
+     * Getter - postal code
      * @return postal code of customer
      */
     public String getPostalCode() {
@@ -75,6 +79,7 @@ public class Customer {
     }
 
     /**
+     * Getter - Phone number
      * @return phone number of customer
      */
     public String getPhoneNumber() {
@@ -82,6 +87,7 @@ public class Customer {
     }
 
     /**
+     * Getter - Division
      * @return customers division
      */
     public String getDivision() {
@@ -89,6 +95,7 @@ public class Customer {
     }
 
     /**
+     * Getter - Country
      * @return country of customer
      */
     public String getCountry() {
@@ -96,6 +103,7 @@ public class Customer {
     }
 
     /**
+     * Getter - Division ID
      * @return division of customer
      */
     public Integer getDivisionID() {

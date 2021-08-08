@@ -22,6 +22,11 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * customerViewController
+ *
+ * @author Adam Petersen
+ */
 public class customerViewController implements Initializable {
     @FXML
     Button addButton;
@@ -48,6 +53,14 @@ public class customerViewController implements Initializable {
     @FXML
     TableColumn<Customer, String> phoneNumberColumn;
 
+    /**
+     * switchScreen
+     * loads next stage
+     *
+     * @param event Button Click
+     * @param switchPath Path to next stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -56,6 +69,12 @@ public class customerViewController implements Initializable {
         window.show();
     }
 
+    /**
+     * populateCustomers
+     * populates customers on screen
+     *
+     * @param inputList list of customers
+     */
     public void populateCustomers(ObservableList<Customer> inputList) {
         customerIDColumn.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("customerID"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("name"));
@@ -69,12 +88,26 @@ public class customerViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressAddButton
+     * switches screen to add customer
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressAddButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/addCustomer.fxml");
 
     }
 
+    /**
+     * pressEditButton
+     * passes object and loads next stage
+     *
+     * @param event Button Click
+     * @throws IOException
+     * @throws SQLException
+     */
     public void pressEditButton(ActionEvent event) throws IOException, SQLException {
 
         Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
@@ -99,7 +132,14 @@ public class customerViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressDeleteButton
+     * deletes selected object from DB
+     *
+     * @param event Button Click
+     * @throws IOException
+     * @throws SQLException
+     */
     public void pressDeleteButton(ActionEvent event) throws IOException, SQLException {
 
         Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
@@ -122,7 +162,7 @@ public class customerViewController implements Initializable {
             // if user confirms, delete appointment + related appointments due to FK contraints
             if (result.get() == ButtonType.YES) {
                 Boolean customerApptSuccess = AppointmentDB.deleteCustomersAppointments(selectedCustomer.getCustomerID());
-                //TODO lambda
+
                 Boolean customerSuccess = CustomerDB.deleteCustomer(selectedCustomer.getCustomerID());
 
 
@@ -135,7 +175,7 @@ public class customerViewController implements Initializable {
 
                 }
                 else {
-                    //TODO - log error if it occurs
+
                     ButtonType clickOkay = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
                     Alert deleteAppt = new Alert(Alert.AlertType.WARNING,
                             "Failed to delete Customer or related appointments ", clickOkay);
@@ -148,7 +188,6 @@ public class customerViewController implements Initializable {
                     populateCustomers(CustomerDB.getAllCustomers());
                 }
                 catch (SQLException error){
-                    //TODO - log error
                     error.printStackTrace();
                 }
 
@@ -159,12 +198,26 @@ public class customerViewController implements Initializable {
         }
     }
 
+    /**
+     * pressBackButton
+     * loads previous stage
+     *
+     * @param event ButtonClick
+     * @throws IOException
+     */
     public void pressBackButton(ActionEvent event) throws IOException {
 
         switchScreen(event, "/view_controller/appointmentView.fxml");
 
     }
 
+    /**
+     * initialize
+     * initializes stage and objects on it
+     *
+     * @param location user location / time zone
+     * @param resources resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

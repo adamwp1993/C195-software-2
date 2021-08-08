@@ -7,9 +7,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- * MySQL database connectivity class
- * Database credentials stored separately SqlDatabase.properties, for security reasons.
- * Ideally we would use a secrets manager of some kind here, hard coded credentials are BAD!
+ * SqlDatabase
+ *
+ * @author Adam Petersen
  */
 public class SqlDatabase {
 
@@ -23,25 +23,51 @@ public class SqlDatabase {
     private static String jdbcDriver = "com.mysql.jdbc.Driver";
     private static Connection cursor;
 
-
+    /**
+     * SqlDatabase Constructor
+     */
     public SqlDatabase() { };
 
+    /**
+     * Setter - JDBC url
+     *
+     * @param jdbcUrlInput JDBC url for connectivity
+     */
     public static void setJdbcUrl(String jdbcUrlInput) {
         jdbcUrl = jdbcUrlInput;
     }
 
+    /**
+     * Setter- DbName
+     *
+     * @param dbNameInput DB name for connectivity
+     */
     public static void setDbName(String dbNameInput) {
         dbName = dbNameInput;
     }
 
+    /**
+     * Setter - DB username
+     *
+     * @param dbUserNameInput DB username for DB login
+     */
     public static void setDbUserName(String dbUserNameInput) {
         dbUserName = dbUserNameInput;
     }
 
+    /**
+     * Setter - DB password
+     *
+     * @param dbPasswordInput password for login
+     */
     public static void setDbPassword(String dbPasswordInput) {
         dbPassword = dbPasswordInput;
     }
 
+    /**
+     * connectDB
+     * Connect to the database
+     */
     public static void connectDB() {
         try {
             Class.forName(jdbcDriver);
@@ -57,6 +83,11 @@ public class SqlDatabase {
 
     }
 
+    /**
+     * dbCursor
+     *
+     * @return DB connection for use
+     */
     public static Connection dbCursor() {
         return cursor;
     }

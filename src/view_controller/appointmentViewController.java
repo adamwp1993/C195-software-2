@@ -27,6 +27,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * appointmentViewController
+ *
+ * @author Adam Petersen
+ */
 public class appointmentViewController implements Initializable {
     @FXML
     Button newAppointmentButton;
@@ -79,7 +84,14 @@ public class appointmentViewController implements Initializable {
     ZonedDateTime startRangeMarker;
     ZonedDateTime endRangeMarker;
 
-
+    /**
+     * switchScreen
+     * loads new stage
+     *
+     * @param event button click
+     * @param switchPath path of new stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -88,7 +100,10 @@ public class appointmentViewController implements Initializable {
         window.show();
     }
 
-
+    /**
+     * initToggleGroup
+     * creates new toggle group preventing multiple selections
+     */
     public void initToggleGroup() {
 
         filterToggle = new ToggleGroup();
@@ -99,7 +114,12 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressNoFilterButton
+     * loads all appointments on page
+     *
+     * @param event Button Click
+     */
     public void pressNoFilterButton(ActionEvent event) {
         // only one selection at a time! 
         monthFilterButton.setSelected(false);
@@ -131,7 +151,13 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressWeekFilterButton
+     * filters appts by week
+     *
+     * @param event Button Click
+     * @throws SQLException
+     */
     public void pressWeekFilterButton(ActionEvent event) throws SQLException {
         // Only one selection at a time! 
         monthFilterButton.setSelected(false);
@@ -160,7 +186,13 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressMonthFilterButton
+     * filters appts by month
+     *
+     * @param event Button Click
+     * @throws SQLException
+     */
     public void pressMonthFilterButton(ActionEvent event) throws SQLException {
         weekFilterButton.setSelected(false);
         noFilterButton.setSelected(false);
@@ -187,7 +219,13 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressNextButton
+     * when filtering appointments moves the time block to next time block
+     *
+     * @param event Button Click
+     * @throws SQLException
+     */
     public void pressNextButton(ActionEvent event) throws SQLException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -240,7 +278,13 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressBackButton
+     * moves filtering time block back one unit
+     *
+     * @param event Button Click
+     * @throws SQLException
+     */
     public void pressBackButton(ActionEvent event) throws SQLException {
 
 
@@ -293,7 +337,14 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressDeleteButton
+     * deletes selected appts from DB and reloads appointments table
+     *
+     * @param event Button Click
+     * @throws IOException
+     * @throws SQLException
+     */
     public void pressDeleteButton(ActionEvent event) throws IOException, SQLException {
 
         Appointment selectedAppt = appointmentTable.getSelectionModel().getSelectedItem();
@@ -348,13 +399,25 @@ public class appointmentViewController implements Initializable {
         }
     }
 
-
+    /**
+     * pressNewButton
+     * loads stage to add appointment
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressNewButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/addAppointmentPage.fxml");
 
     }
 
-
+    /**
+     * pressLogoutButton
+     * logs user out
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressLogoutButton(ActionEvent event) throws IOException {
         ButtonType clickYes = ButtonType.YES;
         ButtonType clickNo = ButtonType.NO;
@@ -372,7 +435,14 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressEditButton
+     * passes object to next stage and loads stage
+     *
+     * @param event Button Click
+     * @throws IOException
+     * @throws SQLException
+     */
     public void pressEditButton(ActionEvent event) throws IOException, SQLException {
 
         Appointment selectedAppt = appointmentTable.getSelectionModel().getSelectedItem();
@@ -397,18 +467,36 @@ public class appointmentViewController implements Initializable {
 
     }
 
-
+    /**
+     * pressCustomerButton
+     * loads customer stage
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressCustomerButton(ActionEvent event) throws IOException {
 
         switchScreen(event, "/view_controller/customerView.fxml");
 
     }
 
+    /**
+     * pressReportsPage
+     * loads reports page
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressReportsPage(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/reportsPage.fxml");
 
     }
 
+    /**
+     * loads appointments on page
+     *
+     * @param inputList list of appointments
+     */
     public void populateAppointments(ObservableList<Appointment> inputList) {
         // Takes an observable list of appointments and populates them on screen.
 
@@ -425,6 +513,12 @@ public class appointmentViewController implements Initializable {
 
     }
 
+    /**
+     * checkCanceled
+     * checks to see if any appointments have type cancelled
+     *
+     * @param inputList list of all appointments
+     */
     public void checkCanceled(ObservableList<Appointment> inputList) {
 
         inputList.forEach((appt) -> {
@@ -439,11 +533,15 @@ public class appointmentViewController implements Initializable {
     }
 
 
-
+    /**
+     * initialize
+     * Initializes stage and loads objects on screen
+     *
+     * @param location location / time zone
+     * @param resources resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources)   {
-
-
 
 
         noFilterButton.setSelected(true);

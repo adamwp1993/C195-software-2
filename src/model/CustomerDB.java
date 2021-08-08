@@ -16,6 +16,19 @@ import java.time.format.DateTimeFormatter;
  */
 public class CustomerDB {
 
+    /**
+     * updateCustomer
+     * takes input values and updates it in the DB
+     *
+     * @param division customer division
+     * @param name customer name
+     * @param address customer address
+     * @param postalCode customer postal code
+     * @param phoneNum customer phone number
+     * @param customerID customer ID
+     * @return Boolean indicating operation successful
+     * @throws SQLException
+     */
     public static Boolean updateCustomer( String division, String name, String address,
                                          String postalCode, String phoneNum, Integer customerID) throws SQLException {
 
@@ -49,6 +62,14 @@ public class CustomerDB {
 
     }
 
+    /**
+     * deleteCustomer
+     * deletes customer from DB
+     *
+     * @param customerID customer ID to delete
+     * @return Boolean to indicate successful operation
+     * @throws SQLException
+     */
     public static Boolean deleteCustomer(Integer customerID) throws SQLException {
         PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("DELETE FROM customers " +
                 "WHERE Customer_ID = ?");
@@ -67,6 +88,20 @@ public class CustomerDB {
         }
     }
 
+    /**
+     * addCustomer
+     * Add customer to the Database
+     *
+     * @param country customer Country
+     * @param division customer Division
+     * @param name customer name
+     * @param address customer address
+     * @param postalCode customer postal code
+     * @param phoneNum customer phone number
+     * @param divisionID customer division ID
+     * @return Boolean to indicate successful operation
+     * @throws SQLException
+     */
     public static Boolean addCustomer(String country, String division, String name, String address, String postalCode,
                                       String phoneNum, Integer divisionID) throws SQLException {
 
@@ -102,6 +137,14 @@ public class CustomerDB {
 
     }
 
+    /**
+     * getSpecificDivisionID
+     * takes a division string and finds the corresponding ID
+     *
+     * @param division division to find ID for
+     * @return ID of the division
+     * @throws SQLException
+     */
     public static Integer getSpecificDivisionID(String division) throws SQLException {
         Integer divID = 0;
         PreparedStatement sqlCommand = SqlDatabase.dbCursor().prepareStatement("SELECT Division, Division_ID FROM " +
@@ -120,6 +163,13 @@ public class CustomerDB {
 
     }
 
+    /**
+     * getAllCustomerID
+     * gets all customer ID's to populate comboboxes
+     *
+     * @return List of customer ID's
+     * @throws SQLException
+     */
     public static ObservableList<Integer> getAllCustomerID() throws SQLException {
 
         ObservableList<Integer> allCustomerID = FXCollections.observableArrayList();
@@ -134,6 +184,14 @@ public class CustomerDB {
         return allCustomerID;
     }
 
+    /**
+     * getFilteredDivisions
+     * takes the country and filters the matching first level divisions
+     *
+     * @param inputCountry input country to find the corresponding divisions
+     * @return list of corresponding first level divisions
+     * @throws SQLException
+     */
     public static ObservableList<String> getFilteredDivisions(String inputCountry) throws SQLException {
 
         ObservableList<String> filteredDivs = FXCollections.observableArrayList();
@@ -153,6 +211,13 @@ public class CustomerDB {
 
     }
 
+    /**
+     * getAllCountries
+     * queries DB to get all countries
+     *
+     * @return List of countries
+     * @throws SQLException
+     */
     public static ObservableList<String> getAllCountries() throws SQLException {
 
         ObservableList<String> allCountries = FXCollections.observableArrayList();
@@ -167,6 +232,13 @@ public class CustomerDB {
 
     }
 
+    /**
+     * getAllCustomers
+     * queries DB and gets all customers
+     *
+     * @return list of all customers
+     * @throws SQLException
+     */
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
         // Prepare SQL and execute query
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();

@@ -18,11 +18,11 @@ import utility.Logger;
 
 import java.net.URL;
 
-
-
-//TODO - log all logon attempts. create logger utility
-
-
+/**
+ * loginPageController
+ *
+ * @author Adam Petersen
+ */
 public class loginPageController implements Initializable {
     @ FXML
     private TextField passwordTextBox;
@@ -43,8 +43,14 @@ public class loginPageController implements Initializable {
     @ FXML
     private Label zoneLabel;
 
+    /**
+     * switchScreen
+     * loads new stage
+     * @param event Button Click
+     * @param switchPath path to new stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
-
 
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -55,7 +61,14 @@ public class loginPageController implements Initializable {
 
     }
 
-
+    /**
+     * pressLogonButton
+     * attempts logon
+     *
+     * @param event Button Click
+     * @throws IOException
+     * @throws SQLException
+     */
     public void pressLogonButton(ActionEvent event) throws IOException, SQLException {
         String userName = userTextBox.getText();
         String password = passwordTextBox.getText();
@@ -105,19 +118,39 @@ public class loginPageController implements Initializable {
 
     }
 
-
+    /**
+     * pressClearButton
+     * clears fields on page
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressClearButton(ActionEvent event) throws IOException {
         userTextBox.clear();
         passwordTextBox.clear();
 
     }
 
+    /**
+     * pressExitButton
+     * closes Application
+     *
+     * @param event Button Click
+     * @throws IOException
+     */
     public void pressExitButton(ActionEvent event) throws IOException {
         LogonSession.logOff();
         System.exit(0);
 
     }
 
+    /**
+     * initialize
+     * populates stage
+     *
+     * @param location Time zone/ location
+     * @param resources resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

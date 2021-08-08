@@ -27,6 +27,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * addAppointmentController
+ *
+ * @author Adam Petersen
+ */
 public class addAppointmentPageController implements Initializable {
 
     @FXML
@@ -58,6 +63,14 @@ public class addAppointmentPageController implements Initializable {
     @ FXML
     Button backButton;
 
+    /**
+     * switchScreen
+     * Loads different stage
+     *
+     * @param event Button click
+     * @param switchPath path to new stage
+     * @throws IOException
+     */
     public void switchScreen(ActionEvent event, String switchPath) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(switchPath));
         Scene scene = new Scene(parent);
@@ -66,7 +79,14 @@ public class addAppointmentPageController implements Initializable {
         window.show();
     }
 
-
+    /**
+     * pressSaveButton
+     * handle pressing save button, validate input and add to DB
+     *
+     * @param event Button Click
+     * @throws SQLException
+     * @throws IOException
+     */
     public void pressSaveButton(ActionEvent event) throws SQLException, IOException {
 
 
@@ -186,7 +206,10 @@ public class addAppointmentPageController implements Initializable {
 
     }
 
-
+    /**
+     * pressClearButton
+     * clears values from the page
+     */
     public void pressClearButton() {
         titleTextBox.clear();
         descriptionTextBox.clear();
@@ -202,13 +225,28 @@ public class addAppointmentPageController implements Initializable {
 
     }
 
+    /**
+     * pressBackButton
+     * Loads previous stage
+     *
+     * @param event button click
+     * @throws IOException
+     */
     public void pressBackButton(ActionEvent event) throws IOException {
         switchScreen(event, "/view_controller/appointmentView.fxml");
 
     }
 
-
-
+    /**
+     * validateBusinessHours
+     * Makes sure appointment is scheduled during business hours
+     *
+     * @param startDateTime start appointment datetime
+     * @param endDateTime end appointment datetime
+     * @param apptDate appointment date
+     *
+     * @return Boolean indicating valid input
+     */
     public Boolean validateBusinessHours(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDate apptDate) {
         // (8am to 10pm EST, Not including weekends)
         // Turn into zonedDateTimeObject, so we can evaluate whatever time was entered in user time zone against EST
@@ -236,7 +274,18 @@ public class addAppointmentPageController implements Initializable {
 
     }
 
-
+    /**
+     * validateCustomerOverlap
+     * ensures customer does not have overlapping appointments
+     *
+     * @param inputCustomerID customer ID of new appointment
+     * @param startDateTime start dateime of appointment
+     * @param endDateTime end datetime of appointment
+     * @param apptDate date of appointment
+     *
+     * @return Boolean indicating valid input
+     * @throws SQLException
+     */
     public Boolean validateCustomerOverlap(Integer inputCustomerID, LocalDateTime startDateTime,
                                            LocalDateTime endDateTime, LocalDate apptDate) throws SQLException {
 
@@ -278,6 +327,14 @@ public class addAppointmentPageController implements Initializable {
 
     }
 
+    /**
+     * initialize
+     * initialize the stage and items on screen
+     *
+     * Lambda expression - disables users from picking dates in past or weekend without needing a whole new method.
+     * @param location Stage path
+     * @param resources resources
+     */
     public void initialize(URL location, ResourceBundle resources) {
 
         timeZoneLabel.setText("Your Time Zone:" + LogonSession.getUserTimeZone());
